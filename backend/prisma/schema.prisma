@@ -33,6 +33,26 @@ enum TaskPriority {
   URGENT
 }
 
+enum Action {
+  CREATED
+  UPDATED
+  DELETED
+  STATUS_CHANGED
+  ASSIGNED
+  UNASSIGNED
+  COMMENTED
+  MEMBER_ADDED
+  MEMBER_REMOVED
+}
+
+enum EntityType {
+  TASK
+  PROJECT
+  WORKSPACE
+  COMMENT
+  USER
+}
+
 model User {
   id               String            @id @default(uuid())
   name             String
@@ -44,6 +64,8 @@ model User {
   workspaceMembers WorkspaceMember[]
   projectMembers   ProjectMember[]
   assignedTasks    Task[]
+  comments         Comment[]
+  activities       Activity[]
 }
 
 model Workspace {
@@ -111,6 +133,7 @@ model Task {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   labels      TaskLabel[]
+  comments    Comment[]
 }
 
 model Label {
@@ -133,4 +156,26 @@ model TaskLabel {
   label   Label  @relation(fields: [labelId], references: [id])
 
   @@unique([taskId, labelId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id         String     @id @default(uuid())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id])
+  action     Action
+  entityId   String
+  entityType EntityType
+  metadata   Json?
+  createdAt  DateTime   @default(now())
 }
