@@ -19,6 +19,20 @@ enum ProjectRole {
   VIEWER
 }
 
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
 model User {
   id               String            @id @default(uuid())
   name             String
@@ -29,6 +43,7 @@ model User {
   workspaces       Workspace[]
   workspaceMembers WorkspaceMember[]
   projectMembers   ProjectMember[]
+  assignedTasks    Task[]
 }
 
 model Workspace {
@@ -65,6 +80,7 @@ model Project {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   members     ProjectMember[]
+  tasks       Task[]
 }
 
 model ProjectMember {
@@ -78,4 +94,19 @@ model ProjectMember {
   updatedAt DateTime    @updatedAt
 
   @@unique([userId, projectId])
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id])
+  assigneeId  String?
+  assignee    User?        @relation(fields: [assigneeId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
