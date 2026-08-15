@@ -153,6 +153,9 @@ model Task {
   updatedAt   DateTime     @updatedAt
   labels      TaskLabel[]
   comments    Comment[]
+
+  @@index([projectId, status])
+  @@index([assigneeId])
 }
 
 model Label {
@@ -186,6 +189,8 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([taskId])
 }
 
 model Activity {
@@ -197,6 +202,9 @@ model Activity {
   entityType EntityType
   metadata   Json?
   createdAt  DateTime   @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
 }
 
 model Notification {
@@ -208,4 +216,6 @@ model Notification {
   message   String
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
+
+  @@index([userId, isRead])
 }
