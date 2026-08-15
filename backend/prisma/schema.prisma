@@ -115,7 +115,7 @@ model Project {
   id          String          @id @default(uuid())
   name        String
   description String?
-  status      ProjectStatus
+  status      ProjectStatus   @default(PLANNING)
   workspaceId String
   workspace   Workspace       @relation(fields: [workspaceId], references: [id])
   createdAt   DateTime        @default(now())
