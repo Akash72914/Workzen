@@ -53,6 +53,15 @@ enum EntityType {
   USER
 }
 
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_STATUS_CHANGED
+  COMMENT_ADDED
+  PROJECT_INVITE
+  MENTION
+  MEMBER_ADDED
+}
+
 model User {
   id               String            @id @default(uuid())
   name             String
@@ -66,6 +75,7 @@ model User {
   assignedTasks    Task[]
   comments         Comment[]
   activities       Activity[]
+  notifications    Notification[]
 }
 
 model Workspace {
@@ -178,4 +188,15 @@ model Activity {
   entityType EntityType
   metadata   Json?
   createdAt  DateTime   @default(now())
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
 }
