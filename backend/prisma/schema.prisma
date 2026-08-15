@@ -13,6 +13,14 @@ enum Role {
   MEMBER
 }
 
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
 enum ProjectRole {
   MANAGER
   MEMBER
@@ -107,6 +115,7 @@ model Project {
   id          String          @id @default(uuid())
   name        String
   description String?
+  status      ProjectStatus
   workspaceId String
   workspace   Workspace       @relation(fields: [workspaceId], references: [id])
   createdAt   DateTime        @default(now())
