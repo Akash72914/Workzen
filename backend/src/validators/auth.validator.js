@@ -5,7 +5,7 @@ export const registerValidator = [
 
   body("email")
     .trim()
-    .notEmail()
+    .isEmail()
     .withMessage("Please provide a valid email")
     .normalizeEmail(),
 
