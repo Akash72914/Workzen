@@ -10,7 +10,7 @@ export const registerController = async (req, res) => {
       password,
     });
 
-    console.log(user);
+    // console.log(user);
 
     return res.status(201).json({
       success: true,
