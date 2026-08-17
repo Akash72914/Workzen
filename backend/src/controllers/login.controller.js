@@ -1,4 +1,5 @@
 import { loginUser } from "../services/auth.service.js";
+import { generateToken } from "../utils/jwt.js";
 
 export const loginController = async (req, res) => {
   try {
@@ -7,6 +8,15 @@ export const loginController = async (req, res) => {
     const user = await loginUser({
       email,
       password,
+    });
+
+    const token = generateToken(user.id);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res
