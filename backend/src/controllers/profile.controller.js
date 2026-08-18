@@ -1,4 +1,4 @@
-export const meController = async (req, res) => {
+export const profileController = async (req, res) => {
   try {
     const user = req.user;
     return res.status(200).json({ success: true, user });
