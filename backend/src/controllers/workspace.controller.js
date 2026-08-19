@@ -1,4 +1,7 @@
-import { createWorkspace } from "../services/workspace.service.js";
+import {
+    createWorkspace,
+    getUserWorkspaces,
+} from "../services/workspace.service.js";
 
 export const workspaceController = async (req, res) => {
     try {
@@ -18,6 +21,21 @@ export const workspaceController = async (req, res) => {
         });
     } catch (error) {
         console.log("Workspace creation error:", error);
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const getWorkspacesController = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const workspaces = await getUserWorkspaces(userId);
+
+        return res.status(200).json({ success: true, workspaces });
+    } catch (error) {
+        console.log("Get workspaces error:", error);
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });
