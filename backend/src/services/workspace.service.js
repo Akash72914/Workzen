@@ -45,3 +45,28 @@ export const getUserWorkspaces = async (userId) => {
 
     return workspaces;
 };
+
+export const getWorkspaceById = async ({ workspaceId, userId }) => {
+    const workspace = await prisma.workspaceMember.findUnique({
+        where: {
+            userId_workspaceId: {
+                workspaceId,
+                userId,
+            },
+        },
+        select: {
+            workspace: {
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    ownerId: true,
+                },
+            },
+
+            role: true,
+        },
+    });
+
+    return workspace;
+};
