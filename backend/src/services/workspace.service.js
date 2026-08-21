@@ -70,3 +70,24 @@ export const getWorkspaceById = async ({ workspaceId, userId }) => {
 
     return workspace;
 };
+
+export const updateWorkspace = async ({ workspaceId, name, description }) => {
+    const data = {};
+
+    if (name !== undefined) {
+        data.name = name;
+    }
+
+    if (description !== undefined) {
+        data.description = description;
+    }
+
+    const workspace = await prisma.workspace.update({
+        where: {
+            id: workspaceId,
+        },
+        data,
+    });
+
+    return workspace;
+};
