@@ -1,5 +1,6 @@
 import {
     createWorkspace,
+    deleteWorkspace,
     getUserWorkspaces,
     getWorkspaceById,
     updateWorkspace,
@@ -87,6 +88,23 @@ export const updateWorkspaceController = async (req, res) => {
         });
     } catch (error) {
         console.error("Workspace not updated:", error);
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const deleteWorkspaceController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+
+        await deleteWorkspace(workspaceId);
+
+        return res
+            .status(200)
+            .json({ success: true, message: "Workspace deleted" });
+    } catch (error) {
+        console.error("Workspace not deleted:", error);
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });

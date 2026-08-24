@@ -91,3 +91,13 @@ export const updateWorkspace = async ({ workspaceId, name, description }) => {
 
     return workspace;
 };
+
+export const deleteWorkspace = async (workspaceId) => {
+    const workspace = await prisma.workspace.delete({
+        where: {
+            id: workspaceId,
+        },
+    });
+
+    return workspace;
+};

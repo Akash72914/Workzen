@@ -1,6 +1,7 @@
 import express from "express";
 import { authUser } from "../middleware/auth.middleware.js";
 import {
+    deleteWorkspaceController,
     getWorkspaceController,
     getWorkspacesController,
     updateWorkspaceController,
@@ -19,5 +20,10 @@ workspaceRouter.patch(
     requireWorkspaceRole("OWNER", "ADMIN"),
     updateWorkspaceController,
 );
-
+workspaceRouter.delete(
+    "/:workspaceId",
+    authUser,
+    requireWorkspaceRole("OWNER"),
+    deleteWorkspaceController,
+);
 export default workspaceRouter;
