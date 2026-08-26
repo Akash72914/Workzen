@@ -48,3 +48,25 @@ export const addWorkspaceMember = async ({ workspaceId, email, role }) => {
 
     return member;
 };
+
+export const getWorkspaceMembers = async ({ workspaceId }) => {
+    const members = await prisma.workspaceMember.findMany({
+        where: {
+            workspaceId,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return members;
+};

@@ -1,4 +1,7 @@
-import { addWorkspaceMember } from "../services/member.service.js";
+import {
+    addWorkspaceMember,
+    getWorkspaceMembers,
+} from "../services/member.service.js";
 
 export const addMemberController = async (req, res) => {
     try {
@@ -31,6 +34,24 @@ export const addMemberController = async (req, res) => {
                 .json({ success: false, message: error.message });
         }
 
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+export const getMembersController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+
+        const members = await getWorkspaceMembers({
+            workspaceId,
+        });
+
+        return res.status(200).json({ success: true, members });
+    } catch (error) {
+        console.error("Get workspace members error", error);
         return res.status(500).json({
             success: false,
             message: "Internal server error",

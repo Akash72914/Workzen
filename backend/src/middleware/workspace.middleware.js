@@ -45,3 +45,36 @@ export const requireWorkspaceRole = (...allowedRoles) => {
         }
     };
 };
+
+export const requireWorkspaceMember = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const workspaceId = req.params.workspaceId;
+
+        const membership = await prisma.workspaceMember.findUnique({
+            where: {
+                userId_workspaceId: {
+                    userId,
+                    workspaceId,
+                },
+            },
+        });
+
+        if (!membership) {
+            return res
+                .status(403)
+                .json({
+                    success: false,
+                    message: "You do not have access to this workspace",
+                });
+        }
+
+        next();
+    } catch (error) {
+        console.error("Workspace membership error:", error);
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
