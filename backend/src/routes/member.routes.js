@@ -4,6 +4,7 @@ import { requireWorkspaceRole } from "../middleware/workspace.middleware.js";
 import { addMemberController } from "../controllers/member.controller.js";
 import { addMemberValidator } from "../validators/member.validator.js";
 import { validateRequest } from "../middleware/validate.middleware.js";
+import { requireMemberRolePermission } from "../middleware/member.middleware.js";
 
 const memberRouter = express.Router();
 
@@ -13,6 +14,7 @@ memberRouter.post(
     requireWorkspaceRole("OWNER", "ADMIN"),
     addMemberValidator,
     validateRequest,
+    requireMemberRolePermission,
     addMemberController,
 );
 
