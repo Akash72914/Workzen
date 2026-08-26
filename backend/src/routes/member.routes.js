@@ -7,8 +7,12 @@ import {
 import {
     addMemberController,
     getMembersController,
+    updateMemberRoleController,
 } from "../controllers/member.controller.js";
-import { addMemberValidator } from "../validators/member.validator.js";
+import {
+    addMemberValidator,
+    updateMemberRoleValidator,
+} from "../validators/member.validator.js";
 import { validateRequest } from "../middleware/validate.middleware.js";
 import { requireMemberRolePermission } from "../middleware/member.middleware.js";
 
@@ -28,6 +32,14 @@ memberRouter.get(
     authUser,
     requireWorkspaceMember,
     getMembersController,
+);
+memberRouter.patch(
+    "/:workspaceId/members/:memberId",
+    authUser,
+    requireWorkspaceRole("OWNER"),
+    updateMemberRoleValidator,
+    validateRequest,
+    updateMemberRoleController,
 );
 
 export default memberRouter;

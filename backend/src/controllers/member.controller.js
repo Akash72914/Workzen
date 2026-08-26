@@ -1,6 +1,7 @@
 import {
     addWorkspaceMember,
     getWorkspaceMembers,
+    updateMemberRole,
 } from "../services/member.service.js";
 
 export const addMemberController = async (req, res) => {
@@ -56,5 +57,48 @@ export const getMembersController = async (req, res) => {
             success: false,
             message: "Internal server error",
         });
+    }
+};
+
+export const updateMemberRoleController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const memberId = req.params.memberId;
+        const { role } = req.body;
+
+        const member = await updateMemberRole({ workspaceId, memberId, role });
+
+        return res.status(200).json({
+            success: true,
+            message: "Workspace member role updated successfully",
+            member,
+        });
+    } catch (error) {
+        console.log("Member role update error:", error);
+
+        if (error.message === "Workspace member not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (
+            error.message ===
+            "Workspace member does not belong to this workspace"
+        ) {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Cannot change the workspace owner's role") {
+            return res
+                .status(403)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
     }
 };

@@ -16,3 +16,12 @@ export const addMemberValidator = [
         .isIn(["OWNER", "ADMIN", "MEMBER"])
         .withMessage("Invalid workspace role"),
 ];
+
+export const updateMemberRoleValidator = [
+    body("role")
+        .trim()
+        .notEmpty()
+        .withMessage("Role is required")
+        .isIn(["OWNER", "ADMIN", "MEMBER"])
+        .withMessage("Invalid workspace role"),
+];

@@ -70,3 +70,58 @@ export const getWorkspaceMembers = async ({ workspaceId }) => {
 
     return members;
 };
+
+export const updateMemberRole = async ({ workspaceId, memberId, role }) => {
+    const workspaceMember = await prisma.workspaceMember.findUnique({
+        where: {
+            id: memberId,
+        },
+        select: {
+            id: true,
+            role: true,
+            userId: true,
+            workspaceId: true,
+            workspace: {
+                select: { ownerId: true },
+            },
+            user: {
+                select: { id: true, name: true, email: true },
+            },
+        },
+    });
+
+    if (!workspaceMember) {
+        throw new Error("Workspace member not found");
+    }
+
+    if (workspaceMember.workspaceId !== workspaceId) {
+        throw new Error("Workspace member does not belong to this workspace");
+    }
+
+    if (workspaceMember.userId === workspaceMember.workspace.ownerId) {
+        throw new Error("Cannot change the workspace owner's role");
+    }
+
+    const updatedMember = await prisma.workspaceMember.update({
+        where: {
+            id: memberId,
+        },
+        data: {
+            role,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return updatedMember;
+};
