@@ -1,6 +1,7 @@
 import {
     addWorkspaceMember,
     getWorkspaceMembers,
+    leaveWorkspace,
     removeWorkspaceMember,
     updateMemberRole,
 } from "../services/member.service.js";
@@ -146,5 +147,41 @@ export const removeMemberController = async (req, res) => {
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const leaveWorkspaceController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const userId = req.user.id;
+
+        const leftMember = await leaveWorkspace({ workspaceId, userId });
+
+        return res.status(200).json({
+            success: true,
+            message: "You have left the workspace successfully",
+            member: leftMember,
+        });
+    } catch (error) {
+        console.log("Leave workspace error:", error);
+
+        if (error.message === "You are not a member of this workspace") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        if (error.message === "Workspace owner cannot leave the workspace") {
+            return res.status(403).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
 };

@@ -9,6 +9,7 @@ import {
     getMembersController,
     removeMemberController,
     updateMemberRoleController,
+    leaveWorkspaceController,
 } from "../controllers/member.controller.js";
 import {
     addMemberValidator,
@@ -48,5 +49,10 @@ memberRouter.delete(
     requireWorkspaceRole("OWNER"),
     removeMemberController,
 );
-
+memberRouter.delete(
+    "/:workspaceId/members/me",
+    authUser,
+    requireWorkspaceMember,
+    leaveWorkspaceController,
+);
 export default memberRouter;

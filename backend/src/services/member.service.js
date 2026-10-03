@@ -179,3 +179,44 @@ export const removeWorkspaceMember = async ({ workspaceId, memberId }) => {
 
     return removedMember;
 };
+
+export const leaveWorkspace = async ({ workspaceId, userId }) => {
+    const workspaceMember = await prisma.workspaceMember.findUnique({
+        where: {
+            userId_workspaceId: {
+                userId,
+                workspaceId,
+            },
+        },
+        select: {
+            id: true,
+            role: true,
+            workspace: {
+                select: {
+                    ownerId: true,
+                },
+            },
+        },
+    });
+
+    if (!workspaceMember) {
+        throw new Error("You are not a member of this workspace");
+    }
+
+    if (userId === workspaceMember.workspace.ownerId) {
+        throw new Error("Workspace owner cannot leave the workspace");
+    }
+
+    const leftWorkspace = await prisma.workspaceMember.delete({
+        where: {
+            id: workspaceMember.id,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+        },
+    });
+
+    return leftWorkspace;
+};
