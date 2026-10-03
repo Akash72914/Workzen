@@ -7,6 +7,7 @@ import {
 import {
     addMemberController,
     getMembersController,
+    removeMemberController,
     updateMemberRoleController,
 } from "../controllers/member.controller.js";
 import {
@@ -40,6 +41,12 @@ memberRouter.patch(
     updateMemberRoleValidator,
     validateRequest,
     updateMemberRoleController,
+);
+memberRouter.delete(
+    "/:workspaceId/members/:memberId",
+    authUser,
+    requireWorkspaceRole("OWNER"),
+    removeMemberController,
 );
 
 export default memberRouter;
