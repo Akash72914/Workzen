@@ -4,10 +4,13 @@ import {
     deleteWorkspaceController,
     getWorkspaceController,
     getWorkspacesController,
+    ownershipTransferController,
     updateWorkspaceController,
     workspaceController,
 } from "../controllers/workspace.controller.js";
 import { requireWorkspaceRole } from "../middleware/workspace.middleware.js";
+import { transferOwnershipValidator } from "../validators/workspace.validator.js";
+import { validateRequest } from "../middleware/validate.middleware.js";
 
 const workspaceRouter = express.Router();
 
@@ -26,4 +29,13 @@ workspaceRouter.delete(
     requireWorkspaceRole("OWNER"),
     deleteWorkspaceController,
 );
+workspaceRouter.patch(
+    "/:workspaceId/owner",
+    authUser,
+    requireWorkspaceRole("OWNER"),
+    transferOwnershipValidator,
+    validateRequest,
+    ownershipTransferController,
+);
+
 export default workspaceRouter;

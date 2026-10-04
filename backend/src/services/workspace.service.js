@@ -101,3 +101,101 @@ export const deleteWorkspace = async (workspaceId) => {
 
     return workspace;
 };
+
+export const transferWorkspaceOwnership = async ({
+    workspaceId,
+    currentOwnerId,
+    newOwnerId,
+}) => {
+    const currentOwner = await prisma.workspaceMember.findUnique({
+        where: {
+            userId_workspaceId: {
+                userId: currentOwnerId,
+                workspaceId,
+            },
+        },
+        select: {
+            id: true,
+            role: true,
+            userId: true,
+        },
+    });
+
+    const newOwner = await prisma.workspaceMember.findUnique({
+        where: {
+            userId_workspaceId: {
+                userId: newOwnerId,
+                workspaceId,
+            },
+        },
+        select: {
+            id: true,
+            role: true,
+            userId: true,
+        },
+    });
+
+    if (!currentOwner) {
+        throw new Error("You are not a member of this workspace");
+    }
+
+    if (currentOwner.role !== "OWNER") {
+        throw new Error("You are not the workspace owner");
+    }
+
+    if (currentOwnerId === newOwnerId) {
+        throw new Error("You are already the workspace owner");
+    }
+
+    if (!newOwner) {
+        throw new Error("Target user is not a member of this workspace");
+    }
+
+    if (newOwner.role === "OWNER") {
+        throw new Error("User is already the workspace owner");
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+        await tx.workspace.update({
+            where: {
+                id: workspaceId,
+            },
+            data: {
+                ownerId: newOwnerId,
+            },
+        });
+
+        await tx.workspaceMember.update({
+            where: {
+                id: currentOwner.id,
+            },
+            data: {
+                role: "MEMBER",
+            },
+        });
+
+        const updatedOwner = await tx.workspaceMember.update({
+            where: {
+                id: newOwner.id,
+            },
+            data: {
+                role: "OWNER",
+            },
+            select: {
+                id: true,
+                role: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
+                },
+            },
+        });
+
+        return updatedOwner;
+    });
+
+    return result;
+};

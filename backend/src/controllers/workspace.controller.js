@@ -3,6 +3,7 @@ import {
     deleteWorkspace,
     getUserWorkspaces,
     getWorkspaceById,
+    transferWorkspaceOwnership,
     updateWorkspace,
 } from "../services/workspace.service.js";
 
@@ -108,5 +109,67 @@ export const deleteWorkspaceController = async (req, res) => {
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const ownershipTransferController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const currentOwnerId = req.user.id;
+        const newOwnerId = req.body.userId;
+
+        const ownership = await transferWorkspaceOwnership({
+            workspaceId,
+            currentOwnerId,
+            newOwnerId,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Workspace ownership transferred successfully",
+            ownership,
+        });
+    } catch (error) {
+        console.log("Ownership transfer error:", error);
+
+        if (error.message === "You are not a member of this workspace") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        if (error.message === "You are not the workspace owner") {
+            return res.status(403).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        if (error.message === "You are already the workspace owner") {
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        if (error.message === "Target user is not a member of this workspace") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        if (error.message === "User is already the workspace owner") {
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+        }
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
 };
