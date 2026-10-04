@@ -44,15 +44,16 @@ memberRouter.patch(
     updateMemberRoleController,
 );
 memberRouter.delete(
-    "/:workspaceId/members/:memberId",
-    authUser,
-    requireWorkspaceRole("OWNER"),
-    removeMemberController,
-);
-memberRouter.delete(
     "/:workspaceId/members/me",
     authUser,
     requireWorkspaceMember,
     leaveWorkspaceController,
 );
+memberRouter.delete(
+    "/:workspaceId/members/:memberId",
+    authUser,
+    requireWorkspaceRole("OWNER"),
+    removeMemberController,
+);
+
 export default memberRouter;
