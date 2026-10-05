@@ -1,4 +1,7 @@
-import { createProject } from "../services/project.service.js";
+import {
+    createProject,
+    getWorkspaceProjects,
+} from "../services/project.service.js";
 
 export const createProjectController = async (req, res) => {
     try {
@@ -15,6 +18,22 @@ export const createProjectController = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const getProjectsController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+
+        const projects = await getWorkspaceProjects({ workspaceId });
+
+        return res.status(200).json({ success: true, projects });
+    } catch (error) {
+        console.log("Get projects error:", error);
 
         return res
             .status(500)
