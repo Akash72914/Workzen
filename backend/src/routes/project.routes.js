@@ -8,6 +8,7 @@ import { validateRequest } from "../middleware/validate.middleware.js";
 import { createProjectValidator } from "../validators/project.validator.js";
 import {
     createProjectController,
+    getProjectController,
     getProjectsController,
 } from "../controllers/project.controller.js";
 
@@ -26,6 +27,12 @@ projectRouter.get(
     authUser,
     requireWorkspaceMember,
     getProjectsController,
+);
+projectRouter.get(
+    "/:workspaceId/projects/:projectId",
+    authUser,
+    requireWorkspaceMember,
+    getProjectController,
 );
 
 export default projectRouter;

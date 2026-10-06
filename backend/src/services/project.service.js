@@ -30,3 +30,23 @@ export const getWorkspaceProjects = async ({ workspaceId }) => {
 
     return projects;
 };
+
+export const getProjectById = async ({ projectId, workspaceId }) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+            name: true,
+            description: true,
+            status: true,
+            workspaceId: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    return project;
+};
