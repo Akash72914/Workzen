@@ -14,3 +14,22 @@ export const createProjectValidator = [
         .isLength({ max: 500 })
         .withMessage("Project description cannot exceed 500 characters"),
 ];
+
+export const updateProjectValidator = [
+    body("name")
+        .optional()
+        .trim()
+        .isLength({ min: 3, max: 100 })
+        .withMessage("Project name must be between 3 and 100 characters"),
+
+    body("description")
+        .optional()
+        .trim()
+        .isLength({ max: 500 })
+        .withMessage("Project description cannot exceed 500 characters"),
+
+    body("status")
+        .optional()
+        .isIn(["PLANNING", "ACTIVE", "ON_HOLD", "COMPLETED", "ARCHIVED"])
+        .withMessage("Invalid project status"),
+];

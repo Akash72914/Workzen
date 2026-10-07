@@ -50,3 +50,54 @@ export const getProjectById = async ({ projectId, workspaceId }) => {
 
     return project;
 };
+
+export const updateProject = async ({
+    projectId,
+    workspaceId,
+    name,
+    description,
+    status,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+    });
+
+    if (!project) {
+        return null;
+    }
+
+    const data = {};
+
+    if (name !== undefined) {
+        data.name = name;
+    }
+
+    if (description !== undefined) {
+        data.description = description;
+    }
+
+    if (status !== undefined) {
+        data.status = status;
+    }
+
+    const updatedProject = await prisma.project.update({
+        where: {
+            id: projectId,
+        },
+        data,
+        select: {
+            id: true,
+            name: true,
+            description: true,
+            status: true,
+            workspaceId: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    return updatedProject;
+};

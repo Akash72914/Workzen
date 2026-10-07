@@ -2,6 +2,7 @@ import {
     createProject,
     getProjectById,
     getWorkspaceProjects,
+    updateProject,
 } from "../services/project.service.js";
 
 export const createProjectController = async (req, res) => {
@@ -58,6 +59,40 @@ export const getProjectController = async (req, res) => {
         return res.status(200).json({ success: true, project });
     } catch (error) {
         console.log("Get project error:", error);
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const updateProjectController = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const workspaceId = req.params.workspaceId;
+        const { name, description, status } = req.body;
+
+        const project = await updateProject({
+            projectId,
+            workspaceId,
+            name,
+            description,
+            status,
+        });
+
+        if (!project) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Project not found" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Project updated successfully",
+            project,
+        });
+    } catch (error) {
+        console.log("Update project error:", error);
 
         return res
             .status(500)
