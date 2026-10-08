@@ -1,5 +1,6 @@
 import {
     createProject,
+    deleteProject,
     getProjectById,
     getWorkspaceProjects,
     updateProject,
@@ -93,6 +94,31 @@ export const updateProjectController = async (req, res) => {
         });
     } catch (error) {
         console.log("Update project error:", error);
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const deleteProjectController = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const workspaceId = req.params.workspaceId;
+
+        const deletedProject = await deleteProject({ projectId, workspaceId });
+
+        if (!deletedProject) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Project not found" });
+        }
+
+        return res
+            .status(200)
+            .json({ success: true, message: "Project deleted successfully" });
+    } catch (error) {
+        console.log("Delete project error:", error);
 
         return res
             .status(500)

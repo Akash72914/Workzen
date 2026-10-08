@@ -11,6 +11,7 @@ import {
 } from "../validators/project.validator.js";
 import {
     createProjectController,
+    deleteProjectController,
     getProjectController,
     getProjectsController,
     updateProjectController,
@@ -45,6 +46,12 @@ projectRouter.patch(
     updateProjectValidator,
     validateRequest,
     updateProjectController,
+);
+projectRouter.delete(
+    "/:workspaceId/projects/:projectId",
+    authUser,
+    requireWorkspaceRole("OWNER", "ADMIN"),
+    deleteProjectController,
 );
 
 export default projectRouter;

@@ -101,3 +101,24 @@ export const updateProject = async ({
 
     return updatedProject;
 };
+
+export const deleteProject = async ({ projectId, workspaceId }) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+    });
+
+    if (!project) {
+        return null;
+    }
+
+    const deletedProject = await prisma.project.delete({
+        where: {
+            id: projectId,
+        },
+    });
+
+    return deletedProject;
+};
