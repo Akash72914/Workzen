@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.routes.js";
 import workspaceRouter from "./routes/workspace.routes.js";
 import memberRouter from "./routes/member.routes.js";
 import projectRouter from "./routes/project.routes.js";
+import projectMemberRouter from "./routes/projectMember.routes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/workspaces", workspaceRouter);
 app.use("/api/workspaces", memberRouter);
 app.use("/api/workspaces", projectRouter);
+app.use("/api/workspaces", projectMemberRouter);
 
 app.get("/", (req, res) => {
     res.send("API WORKING");
