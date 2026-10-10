@@ -107,3 +107,61 @@ export const getProjectMembers = async ({ projectId, workspaceId }) => {
 
     return members;
 };
+
+export const updateProjectMemberRole = async ({
+    workspaceId,
+    projectId,
+    memberId,
+    role,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const member = await prisma.projectMember.findFirst({
+        where: {
+            id: memberId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!member) {
+        throw new Error("Project member not found");
+    }
+
+    const updatedMember = await prisma.projectMember.update({
+        where: {
+            id: memberId,
+        },
+        data: {
+            role,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return updatedMember;
+};

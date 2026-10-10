@@ -1,6 +1,7 @@
 import {
     addProjectMember,
     getProjectMembers,
+    updateProjectMemberRole,
 } from "../services/projectMember.service.js";
 
 export const addProjectMemberController = async (req, res) => {
@@ -58,6 +59,46 @@ export const projectMembersController = async (req, res) => {
         console.log("Project members error:", error);
 
         if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const updateProjectMemberRoleController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const memberId = req.params.memberId;
+        const { role } = req.body;
+
+        const updatedMember = await updateProjectMemberRole({
+            workspaceId,
+            projectId,
+            memberId,
+            role,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Project member role updated successfully",
+            updatedMember,
+        });
+    } catch (error) {
+        console.log("Update project member role error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Project member not found") {
             return res
                 .status(404)
                 .json({ success: false, message: error.message });

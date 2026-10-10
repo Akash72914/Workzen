@@ -15,3 +15,12 @@ export const addProjectMemberValidator = [
         .isIn(["MANAGER", "MEMBER", "VIEWER"])
         .withMessage("Invalid project role"),
 ];
+
+export const updateProjectMemberRoleValidator = [
+    body("role")
+        .trim()
+        .notEmpty()
+        .withMessage("Project role is required")
+        .isIn(["MANAGER", "MEMBER", "VIEWER"])
+        .withMessage("Invalid project role"),
+];
