@@ -1,4 +1,7 @@
-import { addProjectMember } from "../services/projectMember.service.js";
+import {
+    addProjectMember,
+    getProjectMembers,
+} from "../services/projectMember.service.js";
 
 export const addProjectMemberController = async (req, res) => {
     try {
@@ -34,6 +37,29 @@ export const addProjectMemberController = async (req, res) => {
         if (error.message === "User is already a member of this project") {
             return res
                 .status(409)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const projectMembersController = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const workspaceId = req.params.workspaceId;
+
+        const members = await getProjectMembers({ projectId, workspaceId });
+
+        return res.status(200).json({ success: true, members });
+    } catch (error) {
+        console.log("Project members error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
                 .json({ success: false, message: error.message });
         }
 

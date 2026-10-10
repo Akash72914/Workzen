@@ -71,3 +71,39 @@ export const addProjectMember = async ({
 
     return member;
 };
+
+export const getProjectMembers = async ({ projectId, workspaceId }) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const members = await prisma.projectMember.findMany({
+        where: {
+            projectId,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return members;
+};
