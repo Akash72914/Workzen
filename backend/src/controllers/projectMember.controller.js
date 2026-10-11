@@ -1,6 +1,7 @@
 import {
     addProjectMember,
     getProjectMembers,
+    removeProjectMember,
     updateProjectMemberRole,
 } from "../services/projectMember.service.js";
 
@@ -91,6 +92,44 @@ export const updateProjectMemberRoleController = async (req, res) => {
         });
     } catch (error) {
         console.log("Update project member role error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Project member not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const removeProjectMemberController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const memberId = req.params.memberId;
+
+        const deletedMember = await removeProjectMember({
+            workspaceId,
+            projectId,
+            memberId,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Project member deleted successfully",
+            member: deletedMember,
+        });
+    } catch (error) {
+        console.log("Delete project member error:", error);
 
         if (error.message === "Project not found") {
             return res

@@ -12,6 +12,7 @@ import {
 import {
     addProjectMemberController,
     projectMembersController,
+    removeProjectMemberController,
     updateProjectMemberRoleController,
 } from "../controllers/projectMember.controller.js";
 
@@ -40,6 +41,13 @@ projectMemberRouter.patch(
     updateProjectMemberRoleValidator,
     validateRequest,
     updateProjectMemberRoleController,
+);
+
+projectMemberRouter.delete(
+    "/:workspaceId/projects/:projectId/members/:memberId",
+    authUser,
+    requireWorkspaceRole("OWNER", "ADMIN"),
+    removeProjectMemberController,
 );
 
 export default projectMemberRouter;

@@ -165,3 +165,57 @@ export const updateProjectMemberRole = async ({
 
     return updatedMember;
 };
+
+export const removeProjectMember = async ({
+    workspaceId,
+    projectId,
+    memberId,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const member = await prisma.projectMember.findFirst({
+        where: {
+            id: memberId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!member) {
+        throw new Error("Project member not found");
+    }
+
+    const deletedMember = await prisma.projectMember.delete({
+        where: {
+            id: memberId,
+        },
+        select: {
+            id: true,
+            role: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return deletedMember;
+};
