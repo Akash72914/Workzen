@@ -8,6 +8,7 @@ import { validateRequest } from "../middleware/validate.middleware.js";
 import {
     createTaskController,
     getProjectTasksController,
+    getTaskByIdController,
 } from "../controllers/task.controller.js";
 import { createTaskValidator } from "../validators/task.validator.js";
 
@@ -27,6 +28,13 @@ taskRouter.get(
     authUser,
     requireWorkspaceMember,
     getProjectTasksController,
+);
+
+taskRouter.get(
+    "/:workspaceId/projects/:projectId/tasks/:taskId",
+    authUser,
+    requireWorkspaceMember,
+    getTaskByIdController,
 );
 
 export default taskRouter;

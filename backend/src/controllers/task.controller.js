@@ -1,4 +1,8 @@
-import { createTask, getProjectTasks } from "../services/task.service.js";
+import {
+    createTask,
+    getProjectTasks,
+    getTaskById,
+} from "../services/task.service.js";
 
 export const createTaskController = async (req, res) => {
     try {
@@ -56,6 +60,36 @@ export const getProjectTasksController = async (req, res) => {
         console.error("Task listing error:", error);
 
         if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const getTaskByIdController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const taskId = req.params.taskId;
+
+        const task = await getTaskById({ workspaceId, projectId, taskId });
+
+        return res.status(200).json({ success: true, task });
+    } catch (error) {
+        console.error("Task error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Task not found") {
             return res
                 .status(404)
                 .json({ success: false, message: error.message });
