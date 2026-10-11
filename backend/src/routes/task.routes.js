@@ -5,7 +5,10 @@ import {
     requireWorkspaceRole,
 } from "../middleware/workspace.middleware.js";
 import { validateRequest } from "../middleware/validate.middleware.js";
-import { createTaskController } from "../controllers/task.controller.js";
+import {
+    createTaskController,
+    getProjectTasksController,
+} from "../controllers/task.controller.js";
 import { createTaskValidator } from "../validators/task.validator.js";
 
 const taskRouter = express.Router();
@@ -17,6 +20,13 @@ taskRouter.post(
     createTaskValidator,
     validateRequest,
     createTaskController,
+);
+
+taskRouter.get(
+    "/:workspaceId/projects/:projectId/tasks",
+    authUser,
+    requireWorkspaceMember,
+    getProjectTasksController,
 );
 
 export default taskRouter;

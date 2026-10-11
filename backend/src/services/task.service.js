@@ -73,3 +73,47 @@ export const createTask = async ({
 
     return task;
 };
+
+export const getProjectTasks = async ({ workspaceId, projectId }) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const tasks = await prisma.task.findMany({
+        where: {
+            projectId,
+        },
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            status: true,
+            priority: true,
+            dueDate: true,
+            createdAt: true,
+            updatedAt: true,
+            assignee: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return tasks;
+};

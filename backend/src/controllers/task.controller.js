@@ -1,4 +1,4 @@
-import { createTask } from "../services/task.service.js";
+import { createTask, getProjectTasks } from "../services/task.service.js";
 
 export const createTaskController = async (req, res) => {
     try {
@@ -35,6 +35,29 @@ export const createTaskController = async (req, res) => {
         if (error.message === "Assignee is not a member of this project") {
             return res
                 .status(400)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const getProjectTasksController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+
+        const tasks = await getProjectTasks({ workspaceId, projectId });
+
+        return res.status(200).json({ success: true, tasks });
+    } catch (error) {
+        console.error("Task listing error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
                 .json({ success: false, message: error.message });
         }
 
