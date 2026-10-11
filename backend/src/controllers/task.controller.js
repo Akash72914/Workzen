@@ -2,6 +2,7 @@ import {
     createTask,
     getProjectTasks,
     getTaskById,
+    updateTask,
 } from "../services/task.service.js";
 
 export const createTaskController = async (req, res) => {
@@ -92,6 +93,58 @@ export const getTaskByIdController = async (req, res) => {
         if (error.message === "Task not found") {
             return res
                 .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const updateTaskController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const taskId = req.params.taskId;
+        const { title, description, status, priority, assigneeId, dueDate } =
+            req.body;
+
+        const updatedTask = await updateTask({
+            workspaceId,
+            projectId,
+            taskId,
+            title,
+            description,
+            status,
+            priority,
+            assigneeId,
+            dueDate,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Task updated successfully",
+            task: updatedTask,
+        });
+    } catch (error) {
+        console.error("Task update error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Task not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Assignee is not a member of this project") {
+            return res
+                .status(400)
                 .json({ success: false, message: error.message });
         }
 

@@ -163,3 +163,108 @@ export const getTaskById = async ({ workspaceId, projectId, taskId }) => {
 
     return task;
 };
+
+export const updateTask = async ({
+    workspaceId,
+    projectId,
+    taskId,
+    title,
+    description,
+    status,
+    priority,
+    assigneeId,
+    dueDate,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const task = await prisma.task.findFirst({
+        where: {
+            id: taskId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!task) {
+        throw new Error("Task not found");
+    }
+
+    if (assigneeId !== undefined && assigneeId !== null) {
+        const assignee = await prisma.projectMember.findFirst({
+            where: {
+                userId: assigneeId,
+                projectId,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!assignee) {
+            throw new Error("Assignee is not a member of this project");
+        }
+    }
+
+    const data = {};
+
+    if (title !== undefined) {
+        data.title = title;
+    }
+    if (description !== undefined) {
+        data.description = description;
+    }
+    if (status !== undefined) {
+        data.status = status;
+    }
+    if (priority !== undefined) {
+        data.priority = priority;
+    }
+    if (assigneeId !== undefined) {
+        data.assigneeId = assigneeId;
+    }
+    if (dueDate !== undefined) {
+        data.dueDate = dueDate === null ? null : new Date(dueDate);
+    }
+
+    const updatedTask = await prisma.task.update({
+        where: {
+            id: taskId,
+        },
+        data,
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            status: true,
+            priority: true,
+            dueDate: true,
+            projectId: true,
+            assigneeId: true,
+            createdAt: true,
+            updatedAt: true,
+            assignee: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return updatedTask;
+};

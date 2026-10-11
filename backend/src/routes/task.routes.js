@@ -9,8 +9,12 @@ import {
     createTaskController,
     getProjectTasksController,
     getTaskByIdController,
+    updateTaskController,
 } from "../controllers/task.controller.js";
-import { createTaskValidator } from "../validators/task.validator.js";
+import {
+    createTaskValidator,
+    updateTaskValidator,
+} from "../validators/task.validator.js";
 
 const taskRouter = express.Router();
 
@@ -35,6 +39,15 @@ taskRouter.get(
     authUser,
     requireWorkspaceMember,
     getTaskByIdController,
+);
+
+taskRouter.patch(
+    "/:workspaceId/projects/:projectId/tasks/:taskId",
+    authUser,
+    requireWorkspaceMember,
+    updateTaskValidator,
+    validateRequest,
+    updateTaskController,
 );
 
 export default taskRouter;
