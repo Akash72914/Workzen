@@ -268,3 +268,41 @@ export const updateTask = async ({
 
     return updatedTask;
 };
+
+export const deleteTask = async ({ workspaceId, projectId, taskId }) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const task = await prisma.task.findFirst({
+        where: {
+            id: taskId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!task) {
+        throw new Error("Task not found");
+    }
+
+    const deletedTask = await prisma.task.delete({
+        where: {
+            id: taskId,
+        },
+    });
+
+    return deletedTask;
+};

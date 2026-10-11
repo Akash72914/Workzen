@@ -1,5 +1,6 @@
 import {
     createTask,
+    deleteTask,
     getProjectTasks,
     getTaskById,
     updateTask,
@@ -145,6 +146,43 @@ export const updateTaskController = async (req, res) => {
         if (error.message === "Assignee is not a member of this project") {
             return res
                 .status(400)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const deleteTaskController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const taskId = req.params.taskId;
+
+        await deleteTask({
+            workspaceId,
+            projectId,
+            taskId,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Task deleted successfully",
+        });
+    } catch (error) {
+        console.error("Delete task error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Task not found") {
+            return res
+                .status(404)
                 .json({ success: false, message: error.message });
         }
 

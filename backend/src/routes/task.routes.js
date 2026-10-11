@@ -7,6 +7,7 @@ import {
 import { validateRequest } from "../middleware/validate.middleware.js";
 import {
     createTaskController,
+    deleteTaskController,
     getProjectTasksController,
     getTaskByIdController,
     updateTaskController,
@@ -48,6 +49,13 @@ taskRouter.patch(
     updateTaskValidator,
     validateRequest,
     updateTaskController,
+);
+
+taskRouter.delete(
+    "/:workspaceId/projects/:projectId/tasks/:taskId",
+    authUser,
+    requireWorkspaceMember,
+    deleteTaskController,
 );
 
 export default taskRouter;
