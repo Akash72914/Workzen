@@ -1,9 +1,6 @@
 import express from "express";
 import { authUser } from "../middleware/auth.middleware.js";
-import {
-    requireWorkspaceMember,
-    requireWorkspaceRole,
-} from "../middleware/workspace.middleware.js";
+import { requireWorkspaceMember } from "../middleware/workspace.middleware.js";
 import { validateRequest } from "../middleware/validate.middleware.js";
 import {
     createTaskController,
@@ -16,6 +13,8 @@ import {
     createTaskValidator,
     updateTaskValidator,
 } from "../validators/task.validator.js";
+import { createCommentController } from "../controllers/comment.controller.js";
+import { createCommentValidator } from "../validators/comment.validator.js";
 
 const taskRouter = express.Router();
 
@@ -56,6 +55,15 @@ taskRouter.delete(
     authUser,
     requireWorkspaceMember,
     deleteTaskController,
+);
+
+taskRouter.post(
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments",
+    authUser,
+    requireWorkspaceMember,
+    createCommentValidator,
+    validateRequest,
+    createCommentController,
 );
 
 export default taskRouter;
