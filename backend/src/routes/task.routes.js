@@ -16,8 +16,12 @@ import {
 import {
     createCommentController,
     getTaskCommentsController,
+    updateCommentController,
 } from "../controllers/comment.controller.js";
-import { createCommentValidator } from "../validators/comment.validator.js";
+import {
+    createCommentValidator,
+    updateCommentValidator,
+} from "../validators/comment.validator.js";
 
 const taskRouter = express.Router();
 
@@ -74,6 +78,15 @@ taskRouter.get(
     authUser,
     requireWorkspaceMember,
     getTaskCommentsController,
+);
+
+taskRouter.patch(
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments/:commentId",
+    authUser,
+    requireWorkspaceMember,
+    updateCommentValidator,
+    validateRequest,
+    updateCommentController,
 );
 
 export default taskRouter;

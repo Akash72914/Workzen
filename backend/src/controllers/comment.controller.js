@@ -1,4 +1,8 @@
-import { createComment, getTaskComments } from "../services/comment.service.js";
+import {
+    createComment,
+    getTaskComments,
+    updateComment,
+} from "../services/comment.service.js";
 
 export const createCommentController = async (req, res) => {
     try {
@@ -63,6 +67,62 @@ export const getTaskCommentsController = async (req, res) => {
         if (error.message === "Task not found") {
             return res
                 .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const updateCommentController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const taskId = req.params.taskId;
+        const commentId = req.params.commentId;
+        const userId = req.user.id;
+        const { content } = req.body;
+
+        const updatedComment = await updateComment({
+            workspaceId,
+            projectId,
+            taskId,
+            commentId,
+            userId,
+            content,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Comment updated successfully",
+            comment: updatedComment,
+        });
+    } catch (error) {
+        console.error("Task comments error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Task not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Comment not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Forbidden") {
+            return res
+                .status(403)
                 .json({ success: false, message: error.message });
         }
 

@@ -114,3 +114,88 @@ export const getTaskComments = async ({ workspaceId, projectId, taskId }) => {
 
     return comments;
 };
+
+export const updateComment = async ({
+    workspaceId,
+    projectId,
+    taskId,
+    commentId,
+    userId,
+    content,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const task = await prisma.task.findFirst({
+        where: {
+            id: taskId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!task) {
+        throw new Error("Task not found");
+    }
+
+    const comment = await prisma.comment.findFirst({
+        where: {
+            id: commentId,
+            taskId,
+        },
+        select: {
+            id: true,
+            userId: true,
+        },
+    });
+
+    if (!comment) {
+        throw new Error("Comment not found");
+    }
+
+    if (comment.userId !== userId) {
+        throw new Error("Forbidden");
+    }
+
+    const data = {};
+
+    if (content !== undefined) {
+        data.content = content;
+    }
+
+    const updatedComment = await prisma.comment.update({
+        where: {
+            id: commentId,
+        },
+        data,
+        select: {
+            id: true,
+            content: true,
+            taskId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
+    });
+
+    return updatedComment;
+};
