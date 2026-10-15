@@ -15,6 +15,7 @@ import {
 } from "../validators/task.validator.js";
 import {
     createCommentController,
+    deleteCommentController,
     getTaskCommentsController,
     updateCommentController,
 } from "../controllers/comment.controller.js";
@@ -87,6 +88,13 @@ taskRouter.patch(
     updateCommentValidator,
     validateRequest,
     updateCommentController,
+);
+
+taskRouter.delete(
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments/:commentId",
+    authUser,
+    requireWorkspaceMember,
+    deleteCommentController,
 );
 
 export default taskRouter;

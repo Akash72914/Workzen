@@ -1,5 +1,6 @@
 import {
     createComment,
+    deleteComment,
     getTaskComments,
     updateComment,
 } from "../services/comment.service.js";
@@ -100,7 +101,59 @@ export const updateCommentController = async (req, res) => {
             comment: updatedComment,
         });
     } catch (error) {
-        console.error("Task comments error:", error);
+        console.error("Update comment error:", error);
+
+        if (error.message === "Project not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Task not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Comment not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
+        if (error.message === "Forbidden") {
+            return res
+                .status(403)
+                .json({ success: false, message: error.message });
+        }
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const deleteCommentController = async (req, res) => {
+    try {
+        const workspaceId = req.params.workspaceId;
+        const projectId = req.params.projectId;
+        const taskId = req.params.taskId;
+        const commentId = req.params.commentId;
+        const userId = req.user.id;
+
+        await deleteComment({
+            workspaceId,
+            projectId,
+            taskId,
+            commentId,
+            userId,
+        });
+
+        return res
+            .status(200)
+            .json({ success: true, message: "Comment deleted successfully" });
+    } catch (error) {
+        console.error("Delete comment error:", error);
 
         if (error.message === "Project not found") {
             return res

@@ -199,3 +199,66 @@ export const updateComment = async ({
 
     return updatedComment;
 };
+
+export const deleteComment = async ({
+    workspaceId,
+    projectId,
+    taskId,
+    commentId,
+    userId,
+}) => {
+    const project = await prisma.project.findFirst({
+        where: {
+            id: projectId,
+            workspaceId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!project) {
+        throw new Error("Project not found");
+    }
+
+    const task = await prisma.task.findFirst({
+        where: {
+            id: taskId,
+            projectId,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!task) {
+        throw new Error("Task not found");
+    }
+
+    const comment = await prisma.comment.findFirst({
+        where: {
+            id: commentId,
+            taskId,
+        },
+        select: {
+            id: true,
+            userId: true,
+        },
+    });
+
+    if (!comment) {
+        throw new Error("Comment not found");
+    }
+
+    if (comment.userId !== userId) {
+        throw new Error("Forbidden");
+    }
+
+    const deletedComment = await prisma.comment.delete({
+        where: {
+            id: commentId,
+        },
+    });
+
+    return deletedComment;
+};
