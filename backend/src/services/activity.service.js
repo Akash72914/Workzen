@@ -5,9 +5,10 @@ export const createActivity = async ({
     action,
     entityId,
     entityType,
-    metadata,
+    metadata = undefined,
+    db = prisma,
 }) => {
-    const activity = await prisma.activity.create({
+    return db.activity.create({
         data: {
             userId,
             action,
@@ -16,6 +17,4 @@ export const createActivity = async ({
             metadata,
         },
     });
-
-    return activity;
 };

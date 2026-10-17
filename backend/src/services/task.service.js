@@ -1,4 +1,5 @@
 import prisma from "../config/prisma.js";
+import { createActivity } from "./activity.service.js";
 
 export const createTask = async ({
     workspaceId,
@@ -40,38 +41,51 @@ export const createTask = async ({
         }
     }
 
-    const task = await prisma.task.create({
-        data: {
-            title,
-            description,
-            priority,
-            dueDate: dueDate ? new Date(dueDate) : null,
-            projectId,
-            createdById: userId,
-            assigneeId: assigneeId || null,
-        },
-        select: {
-            id: true,
-            title: true,
-            description: true,
-            status: true,
-            priority: true,
-            dueDate: true,
-            projectId: true,
-            assigneeId: true,
-            createdAt: true,
-            updatedAt: true,
-            assignee: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
+    return prisma.$transaction(async (tx) => {
+        const task = await tx.task.create({
+            data: {
+                title,
+                description,
+                priority,
+                dueDate: dueDate ? new Date(dueDate) : null,
+                projectId,
+                // createdById: userId,
+                assigneeId: assigneeId || null,
+            },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                status: true,
+                priority: true,
+                dueDate: true,
+                projectId: true,
+                assigneeId: true,
+                createdAt: true,
+                updatedAt: true,
+                assignee: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    return task;
+        await createActivity({
+            userId,
+            action: "CREATED",
+            entityId: task.id,
+            entityType: "TASK",
+            metadata: {
+                title: task.title,
+            },
+            db: tx,
+        });
+
+        return task;
+    });
 };
 
 export const getProjectTasks = async ({ workspaceId, projectId }) => {
