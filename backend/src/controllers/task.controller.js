@@ -108,6 +108,7 @@ export const updateTaskController = async (req, res) => {
         const workspaceId = req.params.workspaceId;
         const projectId = req.params.projectId;
         const taskId = req.params.taskId;
+        const userId = req.user.id;
         const { title, description, status, priority, assigneeId, dueDate } =
             req.body;
 
@@ -115,6 +116,7 @@ export const updateTaskController = async (req, res) => {
             workspaceId,
             projectId,
             taskId,
+            userId,
             title,
             description,
             status,

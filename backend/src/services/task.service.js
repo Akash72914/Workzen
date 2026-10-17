@@ -182,6 +182,7 @@ export const updateTask = async ({
     workspaceId,
     projectId,
     taskId,
+    userId,
     title,
     description,
     status,
@@ -210,6 +211,12 @@ export const updateTask = async ({
         },
         select: {
             id: true,
+            title: true,
+            description: true,
+            status: true,
+            priority: true,
+            assigneeId: true,
+            dueDate: true,
         },
     });
 
@@ -254,33 +261,115 @@ export const updateTask = async ({
         data.dueDate = dueDate === null ? null : new Date(dueDate);
     }
 
-    const updatedTask = await prisma.task.update({
-        where: {
-            id: taskId,
-        },
-        data,
-        select: {
-            id: true,
-            title: true,
-            description: true,
-            status: true,
-            priority: true,
-            dueDate: true,
-            projectId: true,
-            assigneeId: true,
-            createdAt: true,
-            updatedAt: true,
-            assignee: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
+    return prisma.$transaction(async (tx) => {
+        const updatedTask = await tx.task.update({
+            where: {
+                id: taskId,
+            },
+            data,
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                status: true,
+                priority: true,
+                dueDate: true,
+                projectId: true,
+                assigneeId: true,
+                createdAt: true,
+                updatedAt: true,
+                assignee: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    return updatedTask;
+        const activities = [];
+
+        if (task.status !== updatedTask.status) {
+            activities.push({
+                action: "STATUS_CHANGED",
+                metadata: {
+                    oldValue: task.status,
+                    newValue: updatedTask.status,
+                },
+            });
+        }
+
+        if (task.title !== updatedTask.title) {
+            activities.push({
+                action: "UPDATED",
+                metadata: {
+                    field: "title",
+                    oldValue: task.title,
+                    newValue: updatedTask.title,
+                },
+            });
+        }
+
+        if (task.description !== updatedTask.description) {
+            activities.push({
+                action: "UPDATED",
+                metadata: {
+                    field: "description",
+                    oldValue: task.description,
+                    newValue: updatedTask.description,
+                },
+            });
+        }
+
+        if (task.priority !== updatedTask.priority) {
+            activities.push({
+                action: "UPDATED",
+                metadata: {
+                    field: "priority",
+                    oldValue: task.priority,
+                    newValue: updatedTask.priority,
+                },
+            });
+        }
+
+        const oldDueDate = task.dueDate?.getTime() ?? null;
+        const newDueDate = updatedTask.dueDate?.getTime() ?? null;
+
+        if (oldDueDate !== newDueDate) {
+            activities.push({
+                action: "UPDATED",
+                metadata: {
+                    field: "dueDate",
+                    oldValue: task.dueDate?.toISOString() ?? null,
+                    newValue: updatedTask.dueDate?.toISOString() ?? null,
+                },
+            });
+        }
+
+        if (task.assigneeId !== updatedTask.assigneeId) {
+            activities.push({
+                action: updatedTask.assigneeId ? "ASSIGNED" : "UNASSIGNED",
+                metadata: {
+                    oldAssigneeId: task.assigneeId,
+                    newAssigneeId: updatedTask.assigneeId,
+                },
+            });
+        }
+
+        for (const activity of activities) {
+            await createActivity({
+                userId,
+                action: activity.action,
+                entityId: taskId,
+                entityType: "TASK",
+                metadata: activity.metadata,
+                db: tx,
+            });
+        }
+
+        return updatedTask;
+    });
 };
 
 export const deleteTask = async ({ workspaceId, projectId, taskId }) => {
