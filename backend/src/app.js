@@ -8,6 +8,7 @@ import memberRouter from "./routes/member.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import projectMemberRouter from "./routes/projectMember.routes.js";
 import taskRouter from "./routes/task.routes.js";
+import activityRouter from "./routes/activity.routes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/workspaces", memberRouter);
 app.use("/api/workspaces", projectRouter);
 app.use("/api/workspaces", projectMemberRouter);
 app.use("/api/workspaces", taskRouter);
+app.use("/api/workspaces", activityRouter);
 
 app.get("/", (req, res) => {
     res.send("API WORKING");
