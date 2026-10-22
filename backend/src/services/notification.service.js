@@ -65,7 +65,7 @@ export const getMyNotifications = async ({ userId, page = 1, limit = 20 }) => {
             page: pageNumber,
             limit: pageSize,
             total,
-            totalPages: Math.cell(total / pageSize),
+            totalPages: Math.ceil(total / pageSize),
         },
     };
 };
