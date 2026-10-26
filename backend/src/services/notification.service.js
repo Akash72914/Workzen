@@ -69,3 +69,36 @@ export const getMyNotifications = async ({ userId, page = 1, limit = 20 }) => {
         },
     };
 };
+
+export const markNotificationAsRead = async ({ userId, notificationId }) => {
+    const notification = await prisma.notification.updateMany({
+        where: {
+            id: notificationId,
+            userId,
+        },
+        data: {
+            isRead: true,
+        },
+    });
+
+    if (notification.count === 0) {
+        return null;
+    }
+
+    const updatedNotification = await prisma.notification.findFirst({
+        where: {
+            id: notificationId,
+            userId,
+        },
+        select: {
+            id: true,
+            type: true,
+            title: true,
+            message: true,
+            isRead: true,
+            createdAt: true,
+        },
+    });
+
+    return updatedNotification;
+};
