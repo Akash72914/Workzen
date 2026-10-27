@@ -1,5 +1,6 @@
 import {
     getMyNotifications,
+    getUnreadNotificationCount,
     markNotificationAsRead,
 } from "../services/notification.service.js";
 
@@ -41,15 +42,29 @@ export const markNotificationAsReadController = async (req, res) => {
                 .json({ success: false, message: "Notification not found" });
         }
 
-        return res
-            .status(200)
-            .json({
-                success: true,
-                message: "Notification marked as read",
-                notification,
-            });
+        return res.status(200).json({
+            success: true,
+            message: "Notification marked as read",
+            notification,
+        });
     } catch (error) {
         console.error("Mark notification as read error:", error);
+
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const getUnreadNotificationCountController = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const count = await getUnreadNotificationCount({ userId });
+
+        return res.status(200).json({ success: true, unreadCount: count });
+    } catch (error) {
+        console.error("Get unread notification count error:", error);
 
         return res
             .status(500)
