@@ -372,13 +372,27 @@ export const updateTask = async ({
         if (
             task.assigneeId !== updatedTask.assigneeId &&
             updatedTask.assigneeId !== null &&
-            updatedTask !== userId
+            updatedTask.assigneeId !== userId
         ) {
             await createNotification({
                 userId: updatedTask.assigneeId,
                 type: "TASK_ASSIGNED",
                 title: "Task Assigned",
                 message: `You have been assigned to the "${updatedTask.title}".`,
+                db: tx,
+            });
+        }
+
+        if (
+            task.status !== updatedTask.status &&
+            updatedTask.assigneeId !== null &&
+            updatedTask.assigneeId !== userId
+        ) {
+            await createNotification({
+                userId: updatedTask.assigneeId,
+                type: "TASK_STATUS_CHANGED",
+                title: "Task Status Updated",
+                message: `The status of task changed from "${task.status}" to "${updatedTask.status}"`,
                 db: tx,
             });
         }
