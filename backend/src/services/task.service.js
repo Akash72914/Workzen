@@ -1,5 +1,6 @@
 import prisma from "../config/prisma.js";
 import { createActivity } from "./activity.service.js";
+import { createNotification } from "./notification.service.js";
 
 export const createTask = async ({
     workspaceId,
@@ -364,6 +365,20 @@ export const updateTask = async ({
                 entityId: taskId,
                 entityType: "TASK",
                 metadata: activity.metadata,
+                db: tx,
+            });
+        }
+
+        if (
+            task.assigneeId !== updatedTask.assigneeId &&
+            updatedTask.assigneeId !== null &&
+            updatedTask !== userId
+        ) {
+            await createNotification({
+                userId: updatedTask.assigneeId,
+                type: "TASK_ASSIGNED",
+                title: "Task Assigned",
+                message: `You have been assigned to the "${updatedTask.title}".`,
                 db: tx,
             });
         }
