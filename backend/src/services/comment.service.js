@@ -1,4 +1,6 @@
 import prisma from "../config/prisma.js";
+import { createActivity } from "./activity.service.js";
+import { createNotification } from "./notification.service.js";
 
 export const createComment = async ({
     workspaceId,
@@ -28,6 +30,8 @@ export const createComment = async ({
         },
         select: {
             id: true,
+            title: true,
+            assigneeId: true,
         },
     });
 
@@ -35,29 +39,52 @@ export const createComment = async ({
         throw new Error("Task not found");
     }
 
-    const comment = await prisma.comment.create({
-        data: {
-            content,
-            taskId,
-            userId,
-        },
-        select: {
-            id: true,
-            content: true,
-            taskId: true,
-            userId: true,
-            createdAt: true,
-            updatedAt: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
+    return prisma.$transaction(async (tx) => {
+        const comment = await tx.comment.create({
+            data: {
+                content,
+                taskId,
+                userId,
+            },
+            select: {
+                id: true,
+                content: true,
+                taskId: true,
+                userId: true,
+                createdAt: true,
+                updatedAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    return comment;
+        await createActivity({
+            userId,
+            action: "COMMENTED",
+            entityId: taskId,
+            entityType: "TASK",
+            metadata: {
+                commentId: comment.id,
+            },
+            db: tx,
+        });
+
+        if (task.assigneeId && task.assigneeId !== userId) {
+            await createNotification({
+                userId: task.assigneeId,
+                type: "COMMENT_ADDED",
+                title: "New Comment",
+                message: `A new comment was added to the task "${task.title}".`,
+                db: tx,
+            });
+        }
+
+        return comment;
+    });
 };
 
 export const getTaskComments = async ({ workspaceId, projectId, taskId }) => {
