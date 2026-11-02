@@ -31,6 +31,12 @@ export const addMemberController = async (req, res) => {
                 .json({ success: false, message: error.message });
         }
 
+        if (error.message === "Workspace not found") {
+            return res
+                .status(404)
+                .json({ success: false, message: error.message });
+        }
+
         if (error.message === "User is already a member") {
             return res
                 .status(409)

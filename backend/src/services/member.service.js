@@ -1,9 +1,16 @@
 import prisma from "../config/prisma.js";
+import { createActivity } from "./activity.service.js";
+import { createNotification } from "./notification.service.js";
 
 export const addWorkspaceMember = async ({ workspaceId, email, role }) => {
     const user = await prisma.user.findUnique({
         where: {
             email,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
         },
     });
 
@@ -12,6 +19,20 @@ export const addWorkspaceMember = async ({ workspaceId, email, role }) => {
     }
 
     const userId = user.id;
+
+    const workspace = await prisma.workspace.findUnique({
+        where: {
+            id: workspaceId,
+        },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    if (!workspace) {
+        throw new Error("Workspace not found");
+    }
 
     const existingMember = await prisma.workspaceMember.findUnique({
         where: {
@@ -26,27 +47,51 @@ export const addWorkspaceMember = async ({ workspaceId, email, role }) => {
         throw new Error("User is already a member");
     }
 
-    const member = await prisma.workspaceMember.create({
-        data: {
-            userId,
-            workspaceId,
-            role,
-        },
-        select: {
-            id: true,
-            role: true,
-            createdAt: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
+    return prisma.$transaction(async (tx) => {
+        const member = await tx.workspaceMember.create({
+            data: {
+                userId,
+                workspaceId,
+                role,
+            },
+            select: {
+                id: true,
+                role: true,
+                createdAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    return member;
+        await createActivity({
+            userId,
+            action: "MEMBER_ADDED",
+            entityId: workspaceId,
+            entityType: "WORKSPACE",
+            metadata: {
+                memberId: userId,
+                memberName: user.name,
+                memberEmail: user.email,
+                role,
+            },
+            db: tx,
+        });
+
+        await createNotification({
+            userId,
+            type: "MEMBER_ADDED",
+            title: "Added to Workspace",
+            message: `You have been added to the workspace "${workspace.name}".`,
+            db: tx,
+        });
+
+        return member;
+    });
 };
 
 export const getWorkspaceMembers = async ({ workspaceId }) => {
