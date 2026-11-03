@@ -1,4 +1,6 @@
 import prisma from "../config/prisma.js";
+import { createActivity } from "./activity.service.js";
+import { createNotification } from "./notification.service.js";
 
 export const addProjectMember = async ({
     workspaceId,
@@ -13,6 +15,7 @@ export const addProjectMember = async ({
         },
         select: {
             id: true,
+            name: true,
         },
     });
 
@@ -49,27 +52,49 @@ export const addProjectMember = async ({
         throw new Error("User is already a member of this project");
     }
 
-    const member = await prisma.projectMember.create({
-        data: {
-            userId,
-            projectId,
-            role,
-        },
-        select: {
-            id: true,
-            role: true,
-            createdAt: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
+    return prisma.$transaction(async (tx) => {
+        const member = await tx.projectMember.create({
+            data: {
+                userId,
+                projectId,
+                role,
+            },
+            select: {
+                id: true,
+                role: true,
+                createdAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    return member;
+        await createActivity({
+            userId,
+            action: "MEMBER_ADDED",
+            entityId: projectId,
+            entityType: "PROJECT",
+            metadata: {
+                memberId: userId,
+                role,
+            },
+            db: tx,
+        });
+
+        await createNotification({
+            userId,
+            type: "MEMBER_ADDED",
+            title: "Added to Project",
+            message: `You have been added to the project "${project.name}".`,
+            db: tx,
+        });
+
+        return member;
+    });
 };
 
 export const getProjectMembers = async ({ projectId, workspaceId }) => {
