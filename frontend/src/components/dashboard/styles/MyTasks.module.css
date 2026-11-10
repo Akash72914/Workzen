@@ -1,0 +1,158 @@
+.panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.panelHeader {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelHeader h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.panelHeader p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+
+.taskList {
+  margin: 0;
+  padding: 0 16px;
+  list-style: none;
+}
+
+.taskRow {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  gap: 11px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 120ms ease;
+}
+
+.taskRow:hover {
+  background: var(--color-surface-subtle);
+}
+
+.taskRow:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.taskRow:last-child {
+  border-bottom: 0;
+}
+
+.taskCheck {
+  position: relative;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  place-items: center;
+  cursor: pointer;
+}
+
+.taskCheck input {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkVisual {
+  display: grid;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-surface);
+  color: transparent;
+  font-size: 11px;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.taskCheck input:checked + .checkVisual {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.taskCheck input:focus-visible + .checkVisual {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.taskInfo {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.taskTitle {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-weight: 520;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskProject {
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.due {
+  flex: 0 0 auto;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+}
+
+.dueToday {
+  color: var(--color-danger);
+}
+
+.completed .taskTitle {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.emptyState {
+  padding: 30px 16px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}

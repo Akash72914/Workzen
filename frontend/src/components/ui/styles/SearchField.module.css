@@ -1,0 +1,143 @@
+.search {
+  position: relative;
+  display: flex;
+  width: min(100%, 250px);
+  height: 38px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.search:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.searchIcon {
+  flex: 0 0 auto;
+  font-size: 16px;
+}
+
+.searchTrigger {
+  display: none;
+}
+
+.search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 12px;
+}
+
+.search input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clearButton {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.clearButton:hover {
+  background: var(--color-surface-subtle);
+}
+
+.results {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  min-width: 280px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: 0 12px 32px rgb(18 22 36 / 16%);
+  color: var(--color-text-primary);
+}
+
+.result {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.result:hover,
+.resultActive {
+  background: var(--color-surface-subtle);
+}
+
+.resultType {
+  width: 48px;
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.resultText {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.resultTitle,
+.resultDetail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultTitle {
+  font-size: 11px;
+  font-weight: 550;
+}
+
+.resultDetail {
+  color: var(--color-text-secondary);
+  font-size: 9px;
+}
+
+.noResults {
+  margin: 0;
+  padding: 16px 12px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  text-align: center;
+}
+
+.keyboardHint {
+  margin: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 9px;
+}

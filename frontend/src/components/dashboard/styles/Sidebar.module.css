@@ -1,0 +1,319 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  width: 244px;
+  height: 100vh;
+  flex: 0 0 244px;
+  flex-direction: column;
+  padding: 16px 14px 12px;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.brandRow {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 4px 14px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.brandMark {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.closeButton {
+  display: none;
+}
+
+.workspaceSwitch {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background: var(--color-surface-subtle);
+  text-align: left;
+  cursor: pointer;
+}
+
+.workspaceSwitch:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+}
+
+.workspaceSwitch:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.workspaceSelect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.workspaceMark {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.workspaceText,
+.accountText {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.workspaceName,
+.accountName {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspacePlan,
+.accountPlan {
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+
+.chevron {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.primaryNav,
+.secondaryNav {
+  display: grid;
+  gap: 4px;
+}
+
+.primaryNav {
+  margin-top: 22px;
+}
+
+.navItem {
+  display: flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  gap: 11px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  text-align: left;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.navItem:hover {
+  background: var(--color-surface-subtle);
+  color: var(--color-text-primary);
+}
+
+.navItem:focus-visible,
+.mobileNavItem:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.active:hover {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.navIcon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  stroke-width: 1.8;
+}
+
+.navLabel {
+  flex: 1;
+  font-size: 12px;
+}
+
+.navCount {
+  display: grid;
+  min-width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+
+.sectionLabel {
+  margin: 25px 10px 9px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.account {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 6px 3px;
+}
+
+.mobileNav {
+  display: none;
+}
+
+@media (max-width: 1100px) and (min-width: 641px) {
+  .sidebar {
+    width: 72px;
+    flex-basis: 72px;
+    align-items: center;
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .brandRow {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .brandName,
+  .workspaceText,
+  .chevron,
+  .navLabel,
+  .navCount,
+  .sectionLabel,
+  .secondaryNav,
+  .accountText {
+    display: none;
+  }
+
+  .workspaceSwitch {
+    width: 48px;
+    justify-content: center;
+    padding: 5px;
+  }
+
+  .workspaceSelect {
+    appearance: none;
+  }
+
+  .navItem {
+    width: 48px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .account {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    position: fixed;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(82vw, 290px);
+    height: 100dvh;
+    visibility: hidden;
+    transform: translateX(-105%);
+    transition: transform 180ms ease, visibility 180ms ease;
+    box-shadow: var(--shadow-card);
+  }
+
+  .mobileOpen {
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .closeButton {
+    display: inline-flex;
+  }
+
+  .mobileNav {
+    position: fixed;
+    z-index: 15;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 62px;
+    padding: 6px 8px max(6px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .mobileNavItem {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 9px;
+  }
+
+  .mobileNavItem svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .mobileNavActive {
+    color: var(--color-accent);
+  }
+}

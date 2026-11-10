@@ -1,0 +1,28 @@
+.avatar {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 650;
+  line-height: 1;
+}
+
+.small {
+  width: 26px;
+  height: 26px;
+  font-size: 8px;
+}
+
+.medium {
+  width: 30px;
+  height: 30px;
+  font-size: 9px;
+}
+
+.large {
+  width: 34px;
+  height: 34px;
+  font-size: 10px;
+}
