@@ -1,8 +1,7 @@
-
 import { ProjectCard } from "./ProjectCard";
 import styles from "./styles/ProjectGrid.module.css";
 
-export function ProjectGrid({ projects }) {
+export function ProjectGrid({ projects, onOpen, onEdit, onArchive }) {
   if (projects.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -15,7 +14,13 @@ export function ProjectGrid({ projects }) {
   return (
     <div className={styles.grid}>
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard
+          key={project.id}
+          project={project}
+          onOpen={onOpen}
+          onEdit={onEdit}
+          onArchive={onArchive}
+        />
       ))}
     </div>
   );

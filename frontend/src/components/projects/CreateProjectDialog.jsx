@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -11,16 +10,23 @@ import styles from "./styles/CreateProjectDialog.module.css";
 
 const today = new Date().toISOString().slice(0, 10);
 
-export function CreateProjectDialog({ onClose, onSubmit, projects }) {
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    status: PROJECT_STATUS.PLANNING,
-    priority: PROJECT_PRIORITY.MEDIUM,
-    startDate: today,
-    dueDate: "",
-    managerId: projects[0]?.owner?.id || "",
-  });
+export function CreateProjectDialog({
+  onClose,
+  onSubmit,
+  projects,
+  initialProject = null,
+}) {
+  const isEditing = Boolean(initialProject);
+
+  const [form, setForm] = useState(() => ({
+    name: initialProject?.name || "",
+    description: initialProject?.description || "",
+    status: initialProject?.status || PROJECT_STATUS.PLANNING,
+    priority: initialProject?.priority || PROJECT_PRIORITY.MEDIUM,
+    startDate: initialProject?.startDate || today,
+    dueDate: initialProject?.dueDate || "",
+    managerId: initialProject?.owner?.id || projects[0]?.owner?.id || "",
+  }));
 
   const [error, setError] = useState("");
 
@@ -33,8 +39,12 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
       }
     });
 
+    if (initialProject?.owner) {
+      uniqueManagers.set(initialProject.owner.id, initialProject.owner);
+    }
+
     return [...uniqueManagers.values()];
-  }, [projects]);
+  }, [projects, initialProject]);
 
   useEffect(() => {
     function handleEscape(event) {
@@ -61,6 +71,7 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
     event.preventDefault();
 
     const name = form.name.trim();
+    const description = form.description.trim();
 
     if (!name) {
       setError("Project name is required.");
@@ -72,9 +83,7 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
       return;
     }
 
-    if (
-      form.description.trim().length > 500
-    ) {
+    if (description.length > 500) {
       setError("Description cannot exceed 500 characters.");
       return;
     }
@@ -99,13 +108,13 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
 
     onSubmit({
       name,
-      description: form.description.trim(),
+      description,
       status: form.status,
       priority: form.priority,
       startDate: form.startDate,
       dueDate: form.dueDate,
       owner: selectedManager,
-      workspace: "Acme Studio",
+      workspace: initialProject?.workspace || "Acme Studio",
     });
   }
 
@@ -120,12 +129,18 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="create-project-title"
+        aria-labelledby="project-dialog-title"
       >
         <header className={styles.header}>
           <div>
-            <h2 id="create-project-title">Create project</h2>
-            <p>Set up a new project for your workspace.</p>
+            <h2 id="project-dialog-title">
+              {isEditing ? "Edit project" : "Create project"}
+            </h2>
+            <p>
+              {isEditing
+                ? "Update your project information."
+                : "Set up a new project for your workspace."}
+            </p>
           </div>
 
           <button
@@ -158,9 +173,7 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
             </div>
 
             <div className={styles.field}>
-              <label htmlFor="project-description">
-                Description
-              </label>
+              <label htmlFor="project-description">Description</label>
               <textarea
                 id="project-description"
                 name="description"
@@ -192,10 +205,11 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
                   value={form.status}
                   onChange={handleChange}
                 >
-                  <option value="PLANNING">Planning</option>
-                  <option value="ACTIVE">Active</option>
-                  <option value="ON_HOLD">On hold</option>
-                  <option value="COMPLETED">Completed</option>
+                  <option value={PROJECT_STATUS.PLANNING}>Planning</option>
+                  <option value={PROJECT_STATUS.ACTIVE}>Active</option>
+                  <option value={PROJECT_STATUS.ON_HOLD}>On hold</option>
+                  <option value={PROJECT_STATUS.COMPLETED}>Completed</option>
+                  <option value={PROJECT_STATUS.ARCHIVED}>Archived</option>
                 </select>
               </div>
 
@@ -207,10 +221,10 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
                   value={form.priority}
                   onChange={handleChange}
                 >
-                  <option value="LOW">Low</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="HIGH">High</option>
-                  <option value="URGENT">Urgent</option>
+                  <option value={PROJECT_PRIORITY.LOW}>Low</option>
+                  <option value={PROJECT_PRIORITY.MEDIUM}>Medium</option>
+                  <option value={PROJECT_PRIORITY.HIGH}>High</option>
+                  <option value={PROJECT_PRIORITY.URGENT}>Urgent</option>
                 </select>
               </div>
             </div>
@@ -241,9 +255,7 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
             </div>
 
             <div className={styles.field}>
-              <label htmlFor="project-manager">
-                Project manager
-              </label>
+              <label htmlFor="project-manager">Project manager</label>
               <select
                 id="project-manager"
                 name="managerId"
@@ -274,11 +286,8 @@ export function CreateProjectDialog({ onClose, onSubmit, projects }) {
               Cancel
             </button>
 
-            <button
-              type="submit"
-              className={styles.submitButton}
-            >
-              Create project
+            <button type="submit" className={styles.submitButton}>
+              {isEditing ? "Save changes" : "Create project"}
             </button>
           </footer>
         </form>
