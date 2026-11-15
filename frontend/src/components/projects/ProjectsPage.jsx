@@ -5,6 +5,7 @@ import { mockProjects } from "@/data/projects";
 import { ProjectsHeader } from "./ProjectsHeader";
 import { ProjectToolbar } from "./ProjectToolbar";
 import { ProjectGrid } from "./ProjectGrid";
+import { ProjectList } from "./ProjectList";
 import styles from "./styles/ProjectsPage.module.css";
 
 export function ProjectsPage() {
@@ -97,13 +98,10 @@ export function ProjectsPage() {
                     <strong>{mockProjects.length}</strong> projects
                 </p>
 
-                {view === "grid" && <ProjectGrid projects={filteredProjects} />}
-
-                {view === "list" && (
-                    <div className={styles.placeholder}>
-                        <p>List view is coming next.</p>
-                        <span>Your project table will appear here.</span>
-                    </div>
+                {view === "grid" ? (
+                    <ProjectGrid projects={filteredProjects} />
+                ) : (
+                    <ProjectList projects={filteredProjects} />
                 )}
             </section>
         </div>
