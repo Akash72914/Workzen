@@ -1,0 +1,259 @@
+
+.card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.topRow,
+.badges,
+.progressHeading,
+.taskCount,
+.cardFooter,
+.owner,
+.members,
+.avatarStack,
+.dueDate {
+  display: flex;
+  align-items: center;
+}
+
+.topRow,
+.cardFooter,
+.progressHeading {
+  justify-content: space-between;
+}
+
+.badges {
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.status,
+.priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.active {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+.planning {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.on_hold {
+  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 12%, transparent);
+}
+
+.completed {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+.archived {
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+}
+
+.low {
+  color: var(--color-text-secondary);
+  background: var(--color-surface-subtle);
+}
+
+.medium {
+  color: var(--color-project-teal);
+  background: color-mix(in srgb, var(--color-project-teal) 12%, transparent);
+}
+
+.high {
+  color: var(--color-project-amber);
+  background: color-mix(in srgb, var(--color-project-amber) 12%, transparent);
+}
+
+.urgent {
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.moreButton {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.moreButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.projectInfo {
+  min-height: 70px;
+}
+
+.projectInfo h3 {
+  margin: 0 0 7px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.projectInfo p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressHeading {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+
+.progressHeading strong {
+  color: var(--color-text-primary);
+  font-size: 12px;
+}
+
+.progressTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--color-surface-subtle);
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
+  transition: width 250ms ease;
+}
+
+.taskCount {
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
+
+.cardFooter {
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.owner {
+  min-width: 0;
+  gap: 8px;
+}
+
+.ownerAvatar,
+.memberAvatar,
+.extraMembers {
+  width: 27px;
+  height: 27px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.ownerName {
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.members {
+  gap: 6px;
+  color: var(--color-text-muted);
+}
+
+.avatarStack {
+  padding-left: 5px;
+}
+
+.memberAvatar,
+.extraMembers {
+  margin-left: -6px;
+}
+
+.avatar2 {
+  background: #e8f3ed;
+  color: #18734e;
+}
+
+.avatar3 {
+  background: #fff0df;
+  color: #88560e;
+}
+
+.extraMembers {
+  background: var(--color-surface-subtle);
+  color: var(--color-text-secondary);
+}
+
+.dueDate {
+  gap: 7px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 15px;
+  }
+}
