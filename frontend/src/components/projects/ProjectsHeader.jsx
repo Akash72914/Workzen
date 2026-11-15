@@ -2,7 +2,7 @@
 import { FiPlus } from "react-icons/fi";
 import styles from "./styles/ProjectsHeader.module.css";
 
-export function ProjectsHeader({ totalProjects }) {
+export function ProjectsHeader({ totalProjects, onCreateClick }) {
   return (
     <header className={styles.header}>
       <div className={styles.heading}>
@@ -19,8 +19,7 @@ export function ProjectsHeader({ totalProjects }) {
       <button
         className={styles.createButton}
         type="button"
-        disabled
-        title="Project creation will be implemented in the next step"
+        onClick={onCreateClick}
       >
         <FiPlus size={17} />
         <span>Create project</span>
