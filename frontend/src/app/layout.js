@@ -4,14 +4,14 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+    variable: "--font-inter",
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
-  title: "Workzen | Project management",
-  description: "A calmer way to move your team’s work forward.",
+    title: "Workzen | Project management",
+    description: "A calmer way to move your team’s work forward.",
 };
 
 const themeBootstrap = `
@@ -31,14 +31,14 @@ const themeBootstrap = `
 `;
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-      </head>
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" className={inter.variable} suppressHydrationWarning>
+            <head>
+                <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+            </head>
+            <body>
+                <ThemeProvider>{children}</ThemeProvider>
+            </body>
+        </html>
+    );
 }
