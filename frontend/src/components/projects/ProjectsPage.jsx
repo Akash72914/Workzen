@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { mockProjects } from "@/data/projects";
 import { ProjectsHeader } from "./ProjectsHeader";
 import { ProjectToolbar } from "./ProjectToolbar";
@@ -9,9 +9,11 @@ import { ProjectList } from "./ProjectList";
 import { CreateProjectDialog } from "./CreateProjectDialog";
 import styles from "./styles/ProjectsPage.module.css";
 import { useRouter } from "next/navigation";
+import { getStoredProjects, saveProjects } from "@/utils/projectStorage";
 
 export function ProjectsPage() {
     const [projects, setProjects] = useState(mockProjects);
+    const [projectsLoaded, setProjectsLoaded] = useState(false);
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("ALL");
     const [priority, setPriority] = useState("ALL");
@@ -21,6 +23,19 @@ export function ProjectsPage() {
     const router = useRouter();
 
     const [editingProject, setEditingProject] = useState(null);
+
+    useEffect(() => {
+        queueMicrotask(() => {
+            setProjects(getStoredProjects());
+            setProjectsLoaded(true);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (projectsLoaded) {
+            saveProjects(projects);
+        }
+    }, [projects, projectsLoaded]);
 
     const filteredProjects = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -145,39 +160,43 @@ export function ProjectsPage() {
                 </p>
 
                 {view === "grid" ? (
-  <ProjectGrid
-    projects={filteredProjects}
-    onOpen={(project) => router.push(`/projects/${project.id}`)}
-    onEdit={setEditingProject}
-    onArchive={handleArchiveProject}
-  />
-) : (
-  <ProjectList
-    projects={filteredProjects}
-    onOpen={(project) => router.push(`/projects/${project.id}`)}
-    onEdit={setEditingProject}
-    onArchive={handleArchiveProject}
-  />
-)}
+                    <ProjectGrid
+                        projects={filteredProjects}
+                        onOpen={(project) =>
+                            router.push(`/projects/${project.id}`)
+                        }
+                        onEdit={setEditingProject}
+                        onArchive={handleArchiveProject}
+                    />
+                ) : (
+                    <ProjectList
+                        projects={filteredProjects}
+                        onOpen={(project) =>
+                            router.push(`/projects/${project.id}`)
+                        }
+                        onEdit={setEditingProject}
+                        onArchive={handleArchiveProject}
+                    />
+                )}
             </section>
 
             {isCreateDialogOpen && (
-  <CreateProjectDialog
-    onClose={() => setIsCreateDialogOpen(false)}
-    onSubmit={handleCreateProject}
-    projects={projects}
-  />
-)}
+                <CreateProjectDialog
+                    onClose={() => setIsCreateDialogOpen(false)}
+                    onSubmit={handleCreateProject}
+                    projects={projects}
+                />
+            )}
 
-{editingProject && (
-  <CreateProjectDialog
-    key={editingProject.id}
-    initialProject={editingProject}
-    onClose={() => setEditingProject(null)}
-    onSubmit={handleEditProject}
-    projects={projects}
-  />
-)}
+            {editingProject && (
+                <CreateProjectDialog
+                    key={editingProject.id}
+                    initialProject={editingProject}
+                    onClose={() => setEditingProject(null)}
+                    onSubmit={handleEditProject}
+                    projects={projects}
+                />
+            )}
         </div>
     );
 }

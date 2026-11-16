@@ -1,0 +1,86 @@
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.state,
+.placeholder {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px dashed var(--color-border);
+  border-radius: 9px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.state h2,
+.placeholder h3 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 17px;
+}
+
+.state p,
+.placeholder p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.state a {
+  margin-top: 8px;
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabs button {
+  position: relative;
+  padding: 12px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.tabs button.activeTab {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.tabs button.activeTab::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--color-accent);
+  content: "";
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}

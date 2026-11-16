@@ -1,14 +1,7 @@
-export default async function ProjectDetailsPage({ params }) {
+import { ProjectDetailsPage } from "@/components/projects/details/ProjectDetailsPage";
+
+export default async function ProjectDetailsRoute({ params }) {
     const { projectId } = await params;
 
-    return (
-        <section>
-            <p>Project ID: {projectId}</p>
-            <h1>Project details</h1>
-            <p>
-                The project details module will be implemented in a later
-                milestone.
-            </p>
-        </section>
-    );
+    return <ProjectDetailsPage projectId={projectId} />;
 }
