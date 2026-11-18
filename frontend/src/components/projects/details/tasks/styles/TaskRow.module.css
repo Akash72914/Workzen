@@ -1,0 +1,124 @@
+
+.taskInfo {
+  min-width: 220px;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.taskInfo strong {
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.taskInfo > span {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.labels span {
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-secondary);
+  font-size: 9px;
+}
+
+.status,
+.priority {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status {
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.status option {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.todo {
+  color: var(--color-text-secondary);
+  background: var(--color-surface-subtle);
+}
+
+.in_progress {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.review {
+  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 12%, transparent);
+}
+
+.done {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+.low {
+  color: var(--color-text-secondary);
+  background: var(--color-surface-subtle);
+}
+
+.medium {
+  color: var(--color-project-teal);
+  background: color-mix(in srgb, var(--color-project-teal) 12%, transparent);
+}
+
+.high {
+  color: var(--color-project-amber);
+  background: color-mix(in srgb, var(--color-project-amber) 12%, transparent);
+}
+
+.urgent {
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.assignee {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.dueDate {
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}

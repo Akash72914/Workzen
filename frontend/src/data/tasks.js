@@ -1,0 +1,218 @@
+export const TASK_STATUS = {
+    TODO: "TODO",
+    IN_PROGRESS: "IN_PROGRESS",
+    REVIEW: "REVIEW",
+    DONE: "DONE",
+};
+
+export const TASK_PRIORITY = {
+    LOW: "LOW",
+    MEDIUM: "MEDIUM",
+    HIGH: "HIGH",
+    URGENT: "URGENT",
+};
+
+export const TASK_STATUS_OPTIONS = [
+    { label: "To do", value: TASK_STATUS.TODO },
+    { label: "In progress", value: TASK_STATUS.IN_PROGRESS },
+    { label: "In review", value: TASK_STATUS.REVIEW },
+    { label: "Done", value: TASK_STATUS.DONE },
+];
+
+export const TASK_PRIORITY_OPTIONS = [
+    { label: "Low", value: TASK_PRIORITY.LOW },
+    { label: "Medium", value: TASK_PRIORITY.MEDIUM },
+    { label: "High", value: TASK_PRIORITY.HIGH },
+    { label: "Urgent", value: TASK_PRIORITY.URGENT },
+];
+
+export const mockTasks = [
+    {
+        id: "task-001",
+        projectId: "project-001",
+        title: "Set up authentication APIs",
+        description:
+            "Implement registration, login, logout and JWT authentication.",
+        status: TASK_STATUS.DONE,
+        priority: TASK_PRIORITY.URGENT,
+        assignee: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        reporter: {
+            id: "user-002",
+            name: "Rahul Sharma",
+            initials: "RS",
+        },
+        startDate: "2026-11-01",
+        dueDate: "2026-11-10",
+        labels: ["Backend", "Authentication"],
+        createdAt: "2026-10-28T09:00:00.000Z",
+        updatedAt: "2026-11-10T12:00:00.000Z",
+    },
+    {
+        id: "task-002",
+        projectId: "project-001",
+        title: "Design workspace dashboard",
+        description: "Create the responsive workspace dashboard UI.",
+        status: TASK_STATUS.DONE,
+        priority: TASK_PRIORITY.HIGH,
+        assignee: {
+            id: "user-003",
+            name: "Priya Singh",
+            initials: "PS",
+        },
+        reporter: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        startDate: "2026-11-03",
+        dueDate: "2026-11-12",
+        labels: ["Frontend", "UI"],
+        createdAt: "2026-10-30T10:00:00.000Z",
+        updatedAt: "2026-11-12T15:00:00.000Z",
+    },
+    {
+        id: "task-003",
+        projectId: "project-001",
+        title: "Implement project management APIs",
+        description:
+            "Develop project creation, listing, updating and archiving endpoints.",
+        status: TASK_STATUS.IN_PROGRESS,
+        priority: TASK_PRIORITY.HIGH,
+        assignee: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        reporter: {
+            id: "user-002",
+            name: "Rahul Sharma",
+            initials: "RS",
+        },
+        startDate: "2026-11-12",
+        dueDate: "2026-11-22",
+        labels: ["Backend", "API"],
+        createdAt: "2026-11-08T09:30:00.000Z",
+        updatedAt: "2026-11-16T11:00:00.000Z",
+    },
+    {
+        id: "task-004",
+        projectId: "project-001",
+        title: "Build project details page",
+        description:
+            "Implement project overview, team information and statistics.",
+        status: TASK_STATUS.IN_PROGRESS,
+        priority: TASK_PRIORITY.MEDIUM,
+        assignee: {
+            id: "user-003",
+            name: "Priya Singh",
+            initials: "PS",
+        },
+        reporter: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        startDate: "2026-11-14",
+        dueDate: "2026-11-24",
+        labels: ["Frontend"],
+        createdAt: "2026-11-10T10:00:00.000Z",
+        updatedAt: "2026-11-17T14:00:00.000Z",
+    },
+    {
+        id: "task-005",
+        projectId: "project-001",
+        title: "Review workspace permissions",
+        description: "Verify workspace roles and project-level authorization.",
+        status: TASK_STATUS.REVIEW,
+        priority: TASK_PRIORITY.URGENT,
+        assignee: {
+            id: "user-002",
+            name: "Rahul Sharma",
+            initials: "RS",
+        },
+        reporter: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        startDate: "2026-11-15",
+        dueDate: "2026-11-21",
+        labels: ["Security", "Backend"],
+        createdAt: "2026-11-11T08:30:00.000Z",
+        updatedAt: "2026-11-17T16:00:00.000Z",
+    },
+    {
+        id: "task-006",
+        projectId: "project-001",
+        title: "Write API documentation",
+        description:
+            "Document authentication and project management endpoints.",
+        status: TASK_STATUS.TODO,
+        priority: TASK_PRIORITY.LOW,
+        assignee: {
+            id: "user-004",
+            name: "Neha Verma",
+            initials: "NV",
+        },
+        reporter: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        startDate: "2026-11-20",
+        dueDate: "2026-11-29",
+        labels: ["Documentation"],
+        createdAt: "2026-11-15T10:00:00.000Z",
+        updatedAt: "2026-11-15T10:00:00.000Z",
+    },
+    {
+        id: "task-007",
+        projectId: "project-001",
+        title: "Add responsive navigation",
+        description: "Improve sidebar behavior for tablet and mobile screens.",
+        status: TASK_STATUS.TODO,
+        priority: TASK_PRIORITY.MEDIUM,
+        assignee: {
+            id: "user-003",
+            name: "Priya Singh",
+            initials: "PS",
+        },
+        reporter: {
+            id: "user-001",
+            name: "Akash Yadav",
+            initials: "AY",
+        },
+        startDate: "2026-11-19",
+        dueDate: "2026-11-26",
+        labels: ["Frontend", "Responsive"],
+        createdAt: "2026-11-16T09:00:00.000Z",
+        updatedAt: "2026-11-16T09:00:00.000Z",
+    },
+    {
+        id: "task-008",
+        projectId: "project-002",
+        title: "Design customer login screen",
+        description: "Create the login and password recovery screens.",
+        status: TASK_STATUS.IN_PROGRESS,
+        priority: TASK_PRIORITY.HIGH,
+        assignee: {
+            id: "user-004",
+            name: "Neha Verma",
+            initials: "NV",
+        },
+        reporter: {
+            id: "user-002",
+            name: "Rahul Sharma",
+            initials: "RS",
+        },
+        startDate: "2026-11-10",
+        dueDate: "2026-11-25",
+        labels: ["Frontend", "UI"],
+        createdAt: "2026-11-08T11:00:00.000Z",
+        updatedAt: "2026-11-17T10:00:00.000Z",
+    },
+];
