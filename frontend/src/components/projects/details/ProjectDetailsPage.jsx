@@ -86,7 +86,7 @@ export function ProjectDetailsPage({ projectId }) {
                 </div>
             )}
 
-            {activeTab === "tasks" && <ProjectTasks projectId={project.id} />}
+            {activeTab === "tasks" && <ProjectTasks project={project} />}
 
             {activeTab === "activity" && <ProjectActivity project={project} />}
         </div>

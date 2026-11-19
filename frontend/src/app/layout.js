@@ -1,13 +1,6 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-
-const inter = Inter({
-    variable: "--font-inter",
-    subsets: ["latin"],
-    weight: ["400", "500", "600", "700"],
-});
 
 export const metadata = {
     title: "Workzen | Project management",
@@ -32,7 +25,7 @@ const themeBootstrap = `
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" className={inter.variable} suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
             </head>

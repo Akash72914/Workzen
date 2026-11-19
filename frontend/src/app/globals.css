@@ -52,7 +52,7 @@ body {
 body {
   background: var(--color-canvas);
   color: var(--color-text-primary);
-  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  font-family: Inter, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 160ms ease, color 160ms ease;

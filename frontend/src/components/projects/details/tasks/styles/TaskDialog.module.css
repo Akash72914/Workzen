@@ -1,0 +1,175 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgb(15 18 30 / 48%);
+}
+
+.dialog {
+    width: min(100%, 600px);
+    max-height: min(90vh, 850px);
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 20%);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.header p {
+    margin: 6px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.closeButton {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.closeButton:hover {
+    background: var(--surface-subtle);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px 24px 24px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.field label {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    background: var(--surface);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 13px;
+}
+
+.field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field small {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.twoColumns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.error {
+    margin: 0;
+    color: var(--danger);
+    font-size: 13px;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.cancelButton,
+.submitButton {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.cancelButton {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.submitButton {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.cancelButton:hover {
+    background: var(--surface-subtle);
+}
+
+.submitButton:hover {
+    filter: brightness(1.06);
+}
+
+@media (max-width: 520px) {
+    .overlay {
+        padding: 10px;
+    }
+
+    .header,
+    .form {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .twoColumns {
+        grid-template-columns: 1fr;
+    }
+}

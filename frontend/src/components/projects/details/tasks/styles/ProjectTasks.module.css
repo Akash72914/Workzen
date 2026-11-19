@@ -42,3 +42,44 @@
   color: var(--color-text-secondary);
   font-size: 12px;
 }
+
+.addTaskButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: #5558e8;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.addTaskButton:hover {
+  background: #5558e8;
+  box-shadow: 0 3px 10px rgb(99 102 241 / 20%);
+}
+
+.addTaskButton:active {
+  transform: translateY(1px);
+}
+
+.addTaskButton:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.addIcon {
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 400;
+}
