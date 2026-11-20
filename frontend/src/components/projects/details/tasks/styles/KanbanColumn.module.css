@@ -1,0 +1,83 @@
+.column {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 420px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--surface) 94%, var(--text-primary) 6%);
+    transition: border-color 150ms ease;
+}
+
+.column:hover {
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.header {
+    margin-bottom: 14px;
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.heading h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+.TODO {
+    background: var(--text-muted);
+}
+
+.IN_PROGRESS {
+    background: var(--accent);
+}
+
+.REVIEW {
+    background: var(--warning);
+}
+
+.DONE {
+    background: var(--success);
+}
+
+.count {
+    display: grid;
+    min-width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 11px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 350px;
+}
+
+.empty {
+    display: grid;
+    min-height: 100px;
+    place-items: center;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+}

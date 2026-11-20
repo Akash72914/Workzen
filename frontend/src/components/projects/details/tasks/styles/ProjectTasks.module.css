@@ -1,85 +1,121 @@
-
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .heading h2 {
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: 16px;
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 16px;
 }
 
 .heading p {
-  margin: 5px 0 0;
-  color: var(--color-text-secondary);
-  font-size: 11px;
+    margin: 5px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 11px;
 }
 
 .heading > span {
-  padding: 5px 9px;
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
-  color: var(--color-text-secondary);
-  font-size: 10px;
+    padding: 5px 9px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    color: var(--color-text-secondary);
+    font-size: 10px;
 }
 
 .resultCount {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 10px;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 10px;
 }
 
 .loading {
-  color: var(--color-text-secondary);
-  font-size: 12px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
 }
 
 .addTaskButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  background: #5558e8;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition:
-    background 150ms ease,
-    box-shadow 150ms ease,
-    transform 150ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: #5558e8;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 150ms ease,
+        box-shadow 150ms ease,
+        transform 150ms ease;
 }
 
 .addTaskButton:hover {
-  background: #5558e8;
-  box-shadow: 0 3px 10px rgb(99 102 241 / 20%);
+    background: #5558e8;
+    box-shadow: 0 3px 10px rgb(99 102 241 / 20%);
 }
 
 .addTaskButton:active {
-  transform: translateY(1px);
+    transform: translateY(1px);
 }
 
 .addTaskButton:focus-visible {
-  outline: 3px solid var(--accent-soft);
-  outline-offset: 2px;
+    outline: 3px solid var(--accent-soft);
+    outline-offset: 2px;
 }
 
 .addIcon {
-  font-size: 19px;
-  line-height: 1;
-  font-weight: 400;
+    font-size: 19px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.viewSwitcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-subtle);
+}
+
+.viewSwitcher button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.viewSwitcher button:hover {
+    color: var(--text-primary);
+}
+
+.viewSwitcher button.activeView {
+    background: var(--surface);
+    color: var(--accent);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+    font-weight: 600;
 }

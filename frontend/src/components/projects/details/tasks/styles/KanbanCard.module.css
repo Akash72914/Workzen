@@ -1,0 +1,124 @@
+.card {
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 2px 5px rgb(0 0 0 / 8%);
+    cursor: grab;
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        transform 150ms ease;
+}
+
+.card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 5px 14px rgb(0 0 0 / 12%);
+    transform: translateY(-2px);
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.topRow,
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.priority {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.LOW {
+    color: var(--text-secondary);
+}
+
+.MEDIUM {
+    color: var(--accent);
+}
+
+.HIGH {
+    color: var(--warning);
+}
+
+.URGENT {
+    color: var(--danger);
+}
+
+.editButton {
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.editButton:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.title {
+    margin: 12px 0 6px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.description {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0 0 12px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+
+.label {
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: var(--surface-subtle);
+    color: var(--text-secondary);
+    font-size: 10px;
+}
+
+.footer {
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.assignee {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.dueDate {
+    color: var(--text-muted);
+    font-size: 10px;
+}

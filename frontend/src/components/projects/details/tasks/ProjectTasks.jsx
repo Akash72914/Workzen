@@ -7,6 +7,8 @@ import { TaskList } from "./TaskList";
 import styles from "./styles/ProjectTasks.module.css";
 import { TaskDialog } from "./TaskDialog";
 import { TASK_PRIORITY } from "@/data/tasks";
+import { KanbanBoard } from "./KanbanBoard";
+import { FiList, FiColumns } from "react-icons/fi";
 
 export function ProjectTasks({ project }) {
     const [allTasks, setAllTasks] = useState(() => getStoredTasks());
@@ -16,14 +18,15 @@ export function ProjectTasks({ project }) {
     const [sortBy, setSortBy] = useState("recent");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
+    const [view, setView] = useState("list");
 
     useEffect(() => {
         saveTasks(allTasks);
     }, [allTasks]);
 
     const projectTasks = allTasks.filter(
-  (task) => task.projectId === project.id
-);
+        (task) => task.projectId === project.id,
+    );
 
     const filteredTasks = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -65,13 +68,13 @@ export function ProjectTasks({ project }) {
         });
     }, [projectTasks, search, status, priority, sortBy]);
 
-    function handleStatusChange(taskId, nextStatus) {
+    function handleStatusChange(taskId, newStatus) {
         setAllTasks((current) =>
             current.map((task) =>
                 task.id === taskId
                     ? {
                           ...task,
-                          status: nextStatus,
+                          status: newStatus,
                           updatedAt: new Date().toISOString(),
                       }
                     : task,
@@ -136,18 +139,38 @@ export function ProjectTasks({ project }) {
                     <p>Manage and track work within this project.</p>
                 </div>
                 <button
-  type="button"
-  className={styles.addTaskButton}
-  onClick={() => {
-    setEditingTask(null);
-    setIsDialogOpen(true);
-  }}
->
-  <span className={styles.addIcon}>+</span>
-  Add task
-</button>
+                    type="button"
+                    className={styles.addTaskButton}
+                    onClick={() => {
+                        setEditingTask(null);
+                        setIsDialogOpen(true);
+                    }}
+                >
+                    <span className={styles.addIcon}>+</span>
+                    Add task
+                </button>
 
                 <span>{projectTasks.length} tasks</span>
+            </div>
+
+            <div className={styles.viewSwitcher}>
+                <button
+                    type="button"
+                    className={view === "list" ? styles.activeView : ""}
+                    onClick={() => setView("list")}
+                >
+                    <FiList />
+                    List
+                </button>
+
+                <button
+                    type="button"
+                    className={view === "board" ? styles.activeView : ""}
+                    onClick={() => setView("board")}
+                >
+                    <FiColumns />
+                    Board
+                </button>
             </div>
 
             <TaskToolbar
@@ -162,11 +185,19 @@ export function ProjectTasks({ project }) {
                 onClearFilters={clearFilters}
             />
 
-            <TaskList
-                tasks={filteredTasks}
-                onStatusChange={handleStatusChange}
-                onEdit={openEditDialog}
-            />
+            {view === "list" ? (
+                <TaskList
+                    tasks={filteredTasks}
+                    onStatusChange={handleStatusChange}
+                    onEdit={openEditDialog}
+                />
+            ) : (
+                <KanbanBoard
+                    tasks={filteredTasks}
+                    onStatusChange={handleStatusChange}
+                    onEdit={openEditDialog}
+                />
+            )}
 
             <p className={styles.resultCount}>
                 Showing {filteredTasks.length} of {projectTasks.length} tasks
